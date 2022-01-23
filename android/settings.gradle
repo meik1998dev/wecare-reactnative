@@ -1,0 +1,14 @@
+rootProject.name = 'wecare'
+include ':@logisticinfotech_react-native-payfort-sdk'
+project(':@logisticinfotech_react-native-payfort-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/@logisticinfotech/react-native-payfort-sdk/android')
+include ':react-native-vector-icons'
+project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
+include ':react-native-gesture-handler'
+project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
+include ':react-native-play-services'
+project(':react-native-play-services').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-play-services/android')
+include ':react-native-twilio-video-webrtc'
+project(':react-native-twilio-video-webrtc').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-twilio-video-webrtc/android')
+
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app'

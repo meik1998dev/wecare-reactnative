@@ -101,7 +101,7 @@ const MyOrders = props => {
   const navigateToOrderDetails = data => {
     props.navigation.navigate('My Booking Details', {data: data});
   };
-  console.log(props.bookings);
+
   return (
     <View flex={1}>
       <FlatList

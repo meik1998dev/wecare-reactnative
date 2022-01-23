@@ -11,12 +11,14 @@ import {Colors} from '../assets/Colors.js';
 
 const Loader = () => {
   return (
-    <HStack space={2} alignItems="center">
-      <Spinner accessibilityLabel="Loading posts" />
-      <Heading color={Colors.teal} fontSize="md">
-        Loading
-      </Heading>
-    </HStack>
+    <Center flex={1}>
+      <HStack space={2} alignItems="center">
+        <Spinner size={'lg'} accessibilityLabel="Loading posts" />
+        <Heading size={'lg'} color={Colors.teal} fontSize="md">
+          Loading
+        </Heading>
+      </HStack>
+    </Center>
   );
 };
 

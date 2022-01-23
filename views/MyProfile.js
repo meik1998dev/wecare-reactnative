@@ -31,6 +31,7 @@ import {
   updateProfilePicture,
 } from '../actions/ProfileActions';
 import {Colors} from '../assets/Colors';
+import Loader from '../components/Loader';
 
 const MyProfile = props => {
   const [state, setState] = React.useState({
@@ -43,13 +44,12 @@ const MyProfile = props => {
     gender: '',
     gov_id: '',
     validation: true,
-    data: '',
     blood_group: '',
-    bloodList: [],
   });
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const [bloodList, setBloodList] = React.useState([]);
+
   React.useEffect(() => {
-    getBloodList();
     getProfile();
   }, []);
 
@@ -58,9 +58,10 @@ const MyProfile = props => {
     await axios({
       method: 'post',
       url: api_url + get_profile,
-      data: {customer_id: 7},
+      data: {customer_id: global.id},
     })
       .then(response => {
+        console.log(response.data);
         setState({
           ...state,
           first_name: response.data.result.first_name,
@@ -69,14 +70,16 @@ const MyProfile = props => {
           gov_id: response.data.result.gov_id,
           email: response.data.result.email,
           phone_number: response.data.result.phone_number,
-          // profile_picture: response.profile_picture,
+          profile_picture: response.data.result.profile_picture,
           blood_group: response.data.result.blood_group,
         });
+        getBloodList();
+
         setLoading(false);
       })
       .catch(error => {
         console.log(error);
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
@@ -86,7 +89,7 @@ const MyProfile = props => {
       url: api_url + get_blood_list,
     })
       .then(async response => {
-        setState({...state, bloodList: response.data.result});
+        setBloodList(response.data.result);
       })
       .catch(error => {
         console.log(error);
@@ -115,12 +118,11 @@ const MyProfile = props => {
     Keyboard.dismiss();
     await checkValidate();
     if (state.validation) {
-      props.updateServiceActionPending();
       await axios({
         method: 'post',
         url: api_url + profile_update,
         data: {
-          id: 7,
+          id: global.id,
           first_name: state.first_name,
           mid_name: state.mid_name,
           last_name: state.last_name,
@@ -134,151 +136,155 @@ const MyProfile = props => {
         .then(async response => {
           console.log(response.data);
           alert('Successfully updated');
-          await props.updateServiceActionSuccess(response.data);
           await saveData();
         })
         .catch(error => {
           alert(error);
-          props.updateServiceActionError(error);
         });
     }
   };
-
+  console.log(state);
   const saveData = async () => {
-    if (props.status == 1) {
-      try {
-        await AsyncStorage.setItem('user_id', props.data.id.toString());
-        await AsyncStorage.setItem(
-          'first_name',
-          props.data.first_name.toString(),
-        );
-        global.id = await props.data.id;
-        global.first_name = await props.data.first_name;
-        await setState({...state, password: ''});
-      } catch (e) {
-        console.log(error);
-      }
-    } else {
-      alert(props.message);
+    try {
+      await AsyncStorage.setItem('user_id', props.data.id.toString());
+      await AsyncStorage.setItem(
+        'first_name',
+        props.data.first_name.toString(),
+      );
+      global.id = await props.data.id;
+      global.first_name = await props.data.first_name;
+    } catch (e) {
+      console.log(e);
     }
   };
 
   return (
-    <Box flex={1} width={'full'}>
-      <Text py={5} px={3} color={Colors.teal} fontWeight={'bold'} fontSize={20}>
-        My Profile
-      </Text>
+    <>
       {loading ? (
-        <Text>xx</Text>
+        <Loader />
       ) : (
-        <ScrollView contentContainerStyle={{alignItems: 'center'}} w={'100%'}>
-          <Image
-            mb={10}
-            alt="avatar"
-            w={150}
-            rounded={'full'}
-            h={150}
-            source={{
-              uri: 'https://static.vecteezy.com/system/resources/previews/002/002/280/non_2x/old-man-with-beard-wearing-glasses-avatar-character-free-vector.jpg',
-            }}
-          />
-          <VStack px={6} space={4}>
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              First Name
+        <>
+          <Box flex={1} width={'full'}>
+            <Text
+              py={5}
+              px={3}
+              color={Colors.teal}
+              fontWeight={'bold'}
+              fontSize={20}>
+              My Profile
             </Text>
-            <Input
-              rounded={'lg'}
-              value={state.first_name}
-              fontSize={15}
-              onChangeText={TextInputValue =>
-                setState({...state, first_name: TextInputValue})
-              }
-            />
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Midel Name
-            </Text>
-            <Input
-              rounded={'lg'}
-              value={state.mid_name}
-              fontSize={15}
-              onChangeText={TextInputValue =>
-                setState({...state, mid_name: TextInputValue})
-              }
-            />
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Last Name
-            </Text>
-            <Input
-              rounded={'lg'}
-              value={state.last_name}
-              fontSize={15}
-              onChangeText={TextInputValue =>
-                setState({...state, last_name: TextInputValue})
-              }
-            />
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Phone Number
-            </Text>
-            <Input
-              rounded={'lg'}
-              value={state.phone_number}
-              fontSize={15}
-              keyboardType="phone-pad"
-              onChangeText={TextInputValue =>
-                setState({...state, phone_number: TextInputValue})
-              }
-            />
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Email Address
-            </Text>
-            <Input
-              rounded={'lg'}
-              value={state.email}
-              fontSize={15}
-              keyboardType="email-address"
-              onChangeText={TextInputValue =>
-                setState({...state, email: TextInputValue})
-              }
-            />
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Gov ID
-            </Text>
-            <Input
-              rounded={'lg'}
-              value={state.gov_id}
-              fontSize={15}
-              maxLength={10}
-              onChangeText={TextInputValue =>
-                setState({...state, gov_id: TextInputValue})
-              }
-            />
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Blood Group{' '}
-            </Text>
+            <ScrollView
+              contentContainerStyle={{alignItems: 'center'}}
+              w={'100%'}>
+              <Image
+                alt="avatar"
+                style={{
+                  marginBottom: 10,
+                  width: 150,
+                  borderRadius: 100,
+                  height: 150,
+                }}
+                source={{
+                  uri: img_url + state.profile_image,
+                }}
+              />
+              <VStack px={6} space={4}>
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  First Name
+                </Text>
+                <Input
+                  rounded={'lg'}
+                  value={state.first_name}
+                  fontSize={15}
+                  onChangeText={TextInputValue =>
+                    setState({...state, first_name: TextInputValue})
+                  }
+                />
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Midel Name
+                </Text>
+                <Input
+                  rounded={'lg'}
+                  value={state.mid_name}
+                  fontSize={15}
+                  onChangeText={TextInputValue =>
+                    setState({...state, mid_name: TextInputValue})
+                  }
+                />
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Last Name
+                </Text>
+                <Input
+                  rounded={'lg'}
+                  value={state.last_name}
+                  fontSize={15}
+                  onChangeText={TextInputValue =>
+                    setState({...state, last_name: TextInputValue})
+                  }
+                />
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Phone Number
+                </Text>
+                <Input
+                  rounded={'lg'}
+                  value={state.phone_number}
+                  fontSize={15}
+                  keyboardType="phone-pad"
+                  onChangeText={TextInputValue =>
+                    setState({...state, phone_number: TextInputValue})
+                  }
+                />
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Email Address
+                </Text>
+                <Input
+                  rounded={'lg'}
+                  value={state.email}
+                  fontSize={15}
+                  keyboardType="email-address"
+                  onChangeText={TextInputValue =>
+                    setState({...state, email: TextInputValue})
+                  }
+                />
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Gov ID
+                </Text>
+                <Input
+                  rounded={'lg'}
+                  value={state.gov_id}
+                  fontSize={15}
+                  maxLength={10}
+                  onChangeText={TextInputValue =>
+                    setState({...state, gov_id: TextInputValue})
+                  }
+                />
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Blood Group{' '}
+                </Text>
 
-            {state.bloodList && (
-              <Select
-                rounded={'lg'}
-                fontSize={15}
-                minWidth="200"
-                selectedValue={state.blood_group}
-                onValueChange={itemValue =>
-                  setState({...state, blood_group: itemValue})
-                }>
-                {state.bloodList.map(item => (
-                  <Select.Item
-                    key={item.id}
-                    label={item.blood_group}
-                    value={item.blood_group}
-                  />
-                ))}
-              </Select>
-            )}
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Gender{' '}
-            </Text>
+                {bloodList && (
+                  <Select
+                    rounded={'lg'}
+                    fontSize={15}
+                    minWidth="200"
+                    selectedValue={state.blood_group}
+                    onValueChange={itemValue =>
+                      setState({...state, blood_group: itemValue})
+                    }>
+                    {bloodList.map(item => (
+                      <Select.Item
+                        key={item.id}
+                        label={item.blood_group}
+                        value={item.blood_group}
+                      />
+                    ))}
+                  </Select>
+                )}
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Gender{' '}
+                </Text>
 
-            <Select
+                {/* <Select
               rounded={'lg'}
               fontSize={15}
               onValueChange={itemValue =>
@@ -292,26 +298,28 @@ const MyProfile = props => {
               selectedValue={state.gender}>
               <Select.Item key={'Male'} label="Male" value="male" />
               <Select.Item key={'Female'} label="Female" value="female" />
-            </Select>
-            <Text pl={2} mb={-3} color={Colors.purpel}>
-              Password
-            </Text>
-            <Input
-              rounded={'lg'}
-              value={state.first_name}
-              fontSize={15}
-              secureTextEntry={true}
-              onChangeText={TextInputValue =>
-                setState({...state, password: TextInputValue})
-              }
-            />
-            <Button onPress={updateProfile} mb={10} py={3} rounded={'lg'}>
-              Update
-            </Button>
-          </VStack>
-        </ScrollView>
+            </Select> */}
+                <Text pl={2} mb={-3} color={Colors.purpel}>
+                  Password
+                </Text>
+                <Input
+                  rounded={'lg'}
+                  value={state.first_name}
+                  fontSize={15}
+                  secureTextEntry={true}
+                  onChangeText={TextInputValue =>
+                    setState({...state, password: TextInputValue})
+                  }
+                />
+                <Button onPress={updateProfile} mb={10} py={3} rounded={'lg'}>
+                  Update
+                </Button>
+              </VStack>
+            </ScrollView>
+          </Box>
+        </>
       )}
-    </Box>
+    </>
   );
 };
 

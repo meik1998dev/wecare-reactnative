@@ -12,6 +12,7 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {AirbnbRating, Rating} from 'react-native-ratings';
 import {Colors} from '../assets/Colors';
+import Loader from '../components/Loader';
 import {api_url, get_doctor_by_services, img_url} from '../config/Constants';
 
 const DoctorsList = props => {
@@ -42,73 +43,85 @@ const DoctorsList = props => {
   }, []);
 
   return (
-    <VStack p={5}>
-      <Box>
-        <Text fontSize={20} color={Colors.teal}>
-          Choose a doctor
-        </Text>
-      </Box>
-      {state.result ? (
-        <ScrollView
-          contentContainerStyle={{alignItems: 'center'}}
-          w={'full'}
-          pt={5}>
-          {state.result.map(
-            ({doctor_name, profile_image, specialist, overall_rating, id}) => (
-              <Box
-                shadow={2}
-                flexDirection={'row'}
-                style={styles.doctorCard}
-                key={id}>
-                <Image
-                  alt="pic"
-                  style={{
-                    width: 100,
-                    height: 100,
-                    marginRight: 20,
-                    borderRadius: 100,
-                  }}
-                  resizeMode='cover'
-                  source={{
-                    uri: img_url+profile_image,
-                  }}></Image>
-                <VStack space={2} flexBasis={'55%'}>
-                  <Text>{doctor_name}</Text>
-                  <Text color={'gray.500'} fontSize={12}>
-                    {specialist}ertertert
-                  </Text>
-                  <AirbnbRating
-                    ratingBackgroundColor={Colors.yellow}
-                    size={15}
-                    count={5}
-                    defaultRating={overall_rating}
-                    isDisabled={true}
-                    showRating={false}
-                    ratingContainerStyle={{
-                      width: '52%',
-                      marginLeft: 0,
-                    }}
-                  />
-                </VStack>
-
-                <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate('Create Appointment', {
-                      doctor_id: id,
-                      type: props.route.params.type
-                    })
-                  }
-                  flexBasis={'10%'}>
-                  <ArrowForwardIcon style={styles.arrowIcon} />
-                </TouchableOpacity>
-              </Box>
-            ),
-          )}
-        </ScrollView>
+    <>
+      {state.isLoding ? (
+        <Loader />
       ) : (
-        <Text>xx</Text>
+        <VStack p={5}>
+          <Box>
+            <Text fontSize={20} color={Colors.teal}>
+              Choose a doctor
+            </Text>
+          </Box>
+          {state.result ? (
+            <ScrollView
+              contentContainerStyle={{alignItems: 'center'}}
+              w={'full'}
+              pt={5}>
+              {state.result.map(
+                ({
+                  doctor_name,
+                  profile_image,
+                  specialist,
+                  overall_rating,
+                  id,
+                }) => (
+                  <Box
+                    shadow={2}
+                    flexDirection={'row'}
+                    style={styles.doctorCard}
+                    key={id}>
+                    <Image
+                      alt="pic"
+                      style={{
+                        width: 100,
+                        height: 100,
+                        marginRight: 20,
+                        borderRadius: 100,
+                      }}
+                      resizeMode="cover"
+                      source={{
+                        uri: img_url + profile_image,
+                      }}></Image>
+                    <VStack space={2} flexBasis={'55%'}>
+                      <Text>{doctor_name}</Text>
+                      <Text color={'gray.500'} fontSize={12}>
+                        {specialist}ertertert
+                      </Text>
+                      <AirbnbRating
+                        ratingBackgroundColor={Colors.yellow}
+                        size={15}
+                        count={5}
+                        defaultRating={overall_rating}
+                        isDisabled={true}
+                        showRating={false}
+                        ratingContainerStyle={{
+                          width: '52%',
+                          marginLeft: 0,
+                        }}
+                      />
+                    </VStack>
+
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.navigation.navigate('Create Appointment', {
+                          doctor_id: id,
+                          type: props.route.params.type,
+                        })
+                      }
+                      flexBasis={'10%'}>
+                      <ArrowForwardIcon style={styles.arrowIcon} />
+                    </TouchableOpacity>
+                  </Box>
+                ),
+              )}
+            </ScrollView>
+          ) : (
+            <Text>xx</Text>
+          )}
+        </VStack>
       )}
-    </VStack>
+    </>
   );
 };
 

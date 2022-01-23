@@ -17,6 +17,7 @@ import {api_url, img_url} from '../../config/Constants';
 import Moment from 'moment';
 import {useToast} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Loader from '../../components/Loader';
 
 const DoctorHome = () => {
   const [state, setState] = React.useState({
@@ -148,91 +149,93 @@ const DoctorHome = () => {
   };
   console.log(state.data.booking_requests);
   return (
-    <Box w={'100%'}>
+    <>
       {!state.isLoading ? (
-        <VStack>
-          <ScrollView
-            w={'full'}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
-            <Box
-              onPress={() => props.navigation.navigate('My Booking')}
-              my={5}
-              shadow={1}
-              style={styles.card}>
-              <FontAwesome name="list" size={25} color={Colors.teal} />
-              <Text>Total Bookings</Text>
-              <Text>{state.data.total_booking}</Text>
-            </Box>
-            <Box my={5} shadow={1} style={styles.card}>
-              <FontAwesome name="bell" size={25} color={Colors.teal} />
-              <Text>Today Pendings</Text>
-              <Text>{state.data.pending_booking}</Text>
-            </Box>
+        <Box w={'100%'}>
+          <VStack>
+            <ScrollView
+              w={'full'}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <Box
+                onPress={() => props.navigation.navigate('My Booking')}
+                my={5}
+                shadow={1}
+                style={styles.card}>
+                <FontAwesome name="list" size={25} color={Colors.teal} />
+                <Text>Total Bookings</Text>
+                <Text>{state.data.total_booking}</Text>
+              </Box>
+              <Box my={5} shadow={1} style={styles.card}>
+                <FontAwesome name="bell" size={25} color={Colors.teal} />
+                <Text>Today Pendings</Text>
+                <Text>{state.data.pending_booking}</Text>
+              </Box>
 
-            <Box my={5} shadow={1} style={styles.card}>
-              <FontAwesome
-                name="exclamation-triangle"
-                size={25}
-                color={Colors.teal}
-              />
-              <Text>For Approval</Text>
-              <Text>{state.data.booking_requests_count}</Text>
-            </Box>
-          </ScrollView>
+              <Box my={5} shadow={1} style={styles.card}>
+                <FontAwesome
+                  name="exclamation-triangle"
+                  size={25}
+                  color={Colors.teal}
+                />
+                <Text>For Approval</Text>
+                <Text>{state.data.booking_requests_count}</Text>
+              </Box>
+            </ScrollView>
 
-          <Box p={5}>
-            <Text color={Colors.teal} fontWeight={'bold'}>
-              Pending For Approval
-            </Text>
-          </Box>
-          {state.bookings.length === 0 && (
-            <Text alignSelf={'center'} mt={20} fontSize={16}>
-              No Pending Bookings
-            </Text>
-          )}
-          <FlatList
-            data={state.bookings}
-            renderItem={({item, index}) => (
-              <TouchableOpacity
-                onPress={() => popupActions(item.id)}
-                key={index}
-                style={styles.BookCard}>
-                <Box
-                  flexDirection={'row'}
-                  justifyContent={'space-between'}
-                  alignItems={'center'}
-                  w={'full'}>
-                  <Image
-                    style={{width: 75, height: 75}}
-                    source={{
-                      uri: img_url + item.profile_image,
-                    }}
-                  />
-                  <Box>
-                    <Text>{item.first_name}</Text>
-                    <Text numberOfLines={1}>{item.title}</Text>
-                    <Badge colorScheme="warning">
-                      {item.booking_type === 2 ? 'In place' : 'Online'}
-                    </Badge>
-                  </Box>
-                  <Box alignItems={'center'}>
-                    <Text color={Colors.teal}>
-                      {Moment(item.start_time).format('hh:mm A')}
-                    </Text>
-                    <Text color={Colors.teal}>
-                      {Moment(item.start_time).format('DD MMM-YY')}
-                    </Text>
-                  </Box>
-                </Box>
-              </TouchableOpacity>
+            <Box p={5}>
+              <Text color={Colors.teal} fontWeight={'bold'}>
+                Pending For Approval
+              </Text>
+            </Box>
+            {state.bookings.length === 0 && (
+              <Text alignSelf={'center'} mt={20} fontSize={16}>
+                No Pending Bookings
+              </Text>
             )}
-          />
-        </VStack>
+            <FlatList
+              data={state.bookings}
+              renderItem={({item, index}) => (
+                <TouchableOpacity
+                  onPress={() => popupActions(item.id)}
+                  key={index}
+                  style={styles.BookCard}>
+                  <Box
+                    flexDirection={'row'}
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    w={'full'}>
+                    <Image
+                      style={{width: 75, height: 75}}
+                      source={{
+                        uri: img_url + item.profile_image,
+                      }}
+                    />
+                    <Box>
+                      <Text>{item.first_name}</Text>
+                      <Text numberOfLines={1}>{item.title}</Text>
+                      <Badge colorScheme="warning">
+                        {item.booking_type === 2 ? 'In place' : 'Online'}
+                      </Badge>
+                    </Box>
+                    <Box alignItems={'center'}>
+                      <Text color={Colors.teal}>
+                        {Moment(item.start_time).format('hh:mm A')}
+                      </Text>
+                      <Text color={Colors.teal}>
+                        {Moment(item.start_time).format('DD MMM-YY')}
+                      </Text>
+                    </Box>
+                  </Box>
+                </TouchableOpacity>
+              )}
+            />
+          </VStack>
+        </Box>
       ) : (
-        <Text>sdsd</Text>
+        <Loader />
       )}
-    </Box>
+    </>
   );
 };
 

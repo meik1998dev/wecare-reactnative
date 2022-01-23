@@ -7,6 +7,7 @@ import {Input} from 'native-base';
 import {useToast} from 'native-base';
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const DoctorLogin = props => {
   const [state, setState] = React.useState({
@@ -133,14 +134,14 @@ const DoctorLogin = props => {
       <Stack space={4} width={'80%'}>
         <Input
           placeholder="User Name"
-          // InputLeftElement={
-          //    <Icon
-          //       as={<MaterialIcons name='mail' />}
-          //       size={5}
-          //       ml='2'
-          //       color='muted.400'
-          //    />
-          // }
+          InputLeftElement={
+             <Icon
+                as={<FontAwesome name='user' />}
+                size={5}
+                ml='2'
+                color='muted.400'
+             />
+          }
           onChangeText={TextInputValue =>
             setState({...state, username: TextInputValue})
           }
@@ -148,15 +149,15 @@ const DoctorLogin = props => {
         <Input
           placeholder="Password"
           type={show ? 'text' : 'password'}
-          // InputRightElement={
-          //    <Icon
-          //       as={<MaterialIcons name='visibility-off' />}
-          //       size={5}
-          //       onPress={() => setShow(!show)}
-          //       mr='2'
-          //       color={!show ?  'muted.300' : "primary.400"}
-          //    />
-          // }
+          InputRightElement={
+             <Icon
+                as={<FontAwesome name='eye-slash' />}
+                size={5}
+                onPress={() => setShow(!show)}
+                mr='2'
+                color={!show ?  'muted.300' : "primary.400"}
+             />
+          }
           onChangeText={TextInputValue =>
             setState({...state, password: TextInputValue})
           }
@@ -164,14 +165,14 @@ const DoctorLogin = props => {
         <Button py={4} onPress={login} size="sm">
           Login
         </Button>
-        <Button
+        {/* <Button
           fontWeight="bold"
           colorScheme="dark"
           onPress={forgot}
           size="md"
           variant="ghost">
           Forgot Password?
-        </Button>
+        </Button> */}
         <Button
           fontWeight="bold"
           colorScheme="secondary"

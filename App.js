@@ -24,9 +24,18 @@ import MyBooking from './views/doctorViews/MyBooking.js';
 import MyBookingDetails from './views/MyBookingDetails.js';
 import MyBookingsDetails from './views/doctorViews/MyBookingsDetails.js';
 import DoctorChat from './views/doctorViews/DoctorChat.js';
-import { fb } from './config/firebaseConfig.js';
+import {fb} from './config/firebaseConfig.js';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import DoctorLogin from './views/doctorViews/DoctorLogin.js';
+import DoctorRegister from './views/doctorViews/DoctorRegister.js';
+import VideoCall from './views/VideoCall.js';
+import Chat from './views/Chat.js';
+import DoctorHome from './views/doctorViews/DoctorHome.js';
+import DoctorVideoCall from './views/doctorViews/DoctorVideo.js';
+import DoctorsList from './views/DoctorsList.js';
 
 const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
 
 const store = createStore(allReducers);
 
@@ -63,7 +72,6 @@ const theme = extendTheme({
     },
   },
 });
-console.log(fb)
 
 const MyTheme = {
   ...DefaultTheme,
@@ -82,35 +90,70 @@ export default function App() {
     <Provider store={store}>
       <NativeBaseProvider theme={theme}>
         <NavigationContainer theme={MyTheme}>
-          <Drawer.Navigator
-            screenOptions={{
-              headerTitle: 'We Care',
-              headerTitleAlign: 'center',
-              headerStyle: {
-                backgroundColor: Colors.white,
-              },
-            }}>
-            <Drawer.Screen name="Home" component={MainStackNavigator} />
-            <Drawer.Screen name="Profile" component={MyProfile} />
-            <Drawer.Screen name="Doctor Chat" component={DoctorChat} />
-            <Drawer.Screen name="My Appointment" component={MyOrders} />
-            <Drawer.Screen
-              name="Booking Details"
-              component={MyBookingsDetails}
-            />
-            <Drawer.Screen name="My Booking" component={MyBooking} />
-            <Drawer.Screen
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen
               options={{
-                drawerLabel: () => null,
-                title: null,
-                drawerIcon: () => null,
+                title: 'We care',
+                headerTitleAlign: 'center',
               }}
               name="Splash"
               component={Splash}
             />
-          </Drawer.Navigator>
+            <Stack.Screen name="Doctor Login" component={DoctorLogin} />
+            <Stack.Screen name="Doctor Register" component={DoctorRegister} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Doctor Home" component={DoctorNavigator} />
+            <Stack.Screen name="HomeStack" component={CustomerNavigator} />
+            <Stack.Screen
+              name="My Booking Details"
+              component={MyBookingDetails}
+            />
+            <Stack.Screen
+              name="Booking Details"
+              component={MyBookingsDetails}
+            />
+
+            <Stack.Screen name="Video" component={VideoCall} />
+            <Stack.Screen name="DoctorsList" component={DoctorsList} />
+            <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="Doctor Chat" component={DoctorChat} />
+            <Stack.Screen name="Doctor Video" component={DoctorVideoCall} />
+          </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>
     </Provider>
   );
 }
+
+const CustomerNavigator = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerTitle: 'We Care',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: Colors.white,
+        },
+      }}>
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Profile" component={MyProfile} />
+      <Drawer.Screen name="My Appointment" component={MyOrders} />
+      <Drawer.Screen name="Logout" component={Logout} />
+    </Drawer.Navigator>
+  );
+};
+
+const DoctorNavigator = () => (
+  <Drawer.Navigator
+    screenOptions={{
+      headerTitle: 'We Care',
+      headerTitleAlign: 'center',
+      headerStyle: {
+        backgroundColor: Colors.white,
+      },
+    }}>
+    <Drawer.Screen name="Home" component={DoctorHome} />
+    <Drawer.Screen name="My Booking" component={MyBooking} />
+  </Drawer.Navigator>
+);

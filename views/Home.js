@@ -5,6 +5,7 @@ import {Box, VStack, Text, Button} from 'native-base';
 import messaging from '@react-native-firebase/messaging';
 import {home_details, api_url, img_url} from '../config/Constants';
 import axios from 'axios';
+import Loader from '../components/Loader';
 import {Colors} from '../assets/Colors';
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
 
@@ -225,7 +226,7 @@ const Home = props => {
           </VStack>
         </ScrollView>
       ) : (
-        <Text>sd </Text>
+        <Loader/>
       )}
     </>
   );

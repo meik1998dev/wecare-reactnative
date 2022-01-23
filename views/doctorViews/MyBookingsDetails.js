@@ -247,40 +247,48 @@ export default class BookingRequest extends Component {
               </Box>
             </Box>
           </Box>
-          <Box
-            mt={-38}
-            flexDirection={'row'}
-            justifyContent={'space-around'}
-            w={'full'}>
-            <Button
-              //   onPress={navigateToChat}
-              shadow="2"
-              alignItems={'center'}
-              py={4}
-              rounded="xl"
-              onPress={this.chat}>
-              <Box w={20} justifyContent={'space-around'} flexDirection={'row'}>
-                <FontAwesome name="comments" size={20} color="white" />
-                <Text fontWeight={'bold'} color={Colors.white}>
-                  Chat
-                </Text>
-              </Box>
-            </Button>
-            <Button
-              onPress={this.video}
-              alignItems={'center'}
-              shadow="2"
-              colorScheme={'secondary'}
-              py={4}
-              rounded="xl">
-              <Box w={20} justifyContent={'space-around'} flexDirection={'row'}>
-                <FontAwesome name="video-camera" size={20} color="white" />
-                <Text fontWeight={'bold'} color={'white'}>
-                  Video
-                </Text>
-              </Box>
-            </Button>
-          </Box>
+          {this.state.data.booking_type === 1 && (
+            <Box
+              mt={-38}
+              flexDirection={'row'}
+              justifyContent={'space-around'}
+              w={'full'}>
+              <Button
+                //   onPress={navigateToChat}
+                shadow="2"
+                alignItems={'center'}
+                py={4}
+                rounded="xl"
+                onPress={this.chat}>
+                <Box
+                  w={20}
+                  justifyContent={'space-around'}
+                  flexDirection={'row'}>
+                  <FontAwesome name="comments" size={20} color="white" />
+                  <Text fontWeight={'bold'} color={Colors.white}>
+                    Chat
+                  </Text>
+                </Box>
+              </Button>
+              <Button
+                onPress={this.video}
+                alignItems={'center'}
+                shadow="2"
+                colorScheme={'secondary'}
+                py={4}
+                rounded="xl">
+                <Box
+                  w={20}
+                  justifyContent={'space-around'}
+                  flexDirection={'row'}>
+                  <FontAwesome name="video-camera" size={20} color="white" />
+                  <Text fontWeight={'bold'} color={'white'}>
+                    Video
+                  </Text>
+                </Box>
+              </Button>
+            </Box>
+          )}
         </VStack>
       </Box>
     );

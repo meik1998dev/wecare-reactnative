@@ -1,6 +1,4 @@
 rootProject.name = 'wecare'
-include ':@logisticinfotech_react-native-payfort-sdk'
-project(':@logisticinfotech_react-native-payfort-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/@logisticinfotech/react-native-payfort-sdk/android')
 include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
 include ':react-native-gesture-handler'

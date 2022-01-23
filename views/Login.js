@@ -14,7 +14,7 @@ import messaging from '@react-native-firebase/messaging';
 import {CommonActions} from '@react-navigation/native';
 import {Input} from 'native-base';
 import {useToast} from 'native-base';
-// import { MaterialIcons } from '@expo/vector-icons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../assets/Colors';
 
 export const Login = props => {
@@ -109,6 +109,7 @@ export const Login = props => {
       console.log('err');
     }
   };
+  console.log(global.id);
 
   const register = () => {
     props.navigation.navigate('Register');
@@ -131,14 +132,14 @@ export const Login = props => {
       <Stack space={4} width={'80%'}>
         <Input
           placeholder="Email Address"
-          // InputLeftElement={
-          //    <Icon
-          //       as={<MaterialIcons name='mail' />}
-          //       size={5}
-          //       ml='2'
-          //       color='muted.400'
-          //    />
-          // }
+          InputLeftElement={
+            <Icon
+              as={<FontAwesome name="envelope" />}
+              size={5}
+              ml="2"
+              color="muted.400"
+            />
+          }
           keyboardType="email-address"
           onChangeText={TextInputValue =>
             setState({...state, email: TextInputValue})
@@ -147,15 +148,15 @@ export const Login = props => {
         <Input
           placeholder="Password"
           type={show ? 'text' : 'password'}
-          // InputRightElement={
-          //    <Icon
-          //       as={<MaterialIcons name='visibility-off' />}
-          //       size={5}
-          //       onPress={() => setShow(!show)}
-          //       mr='2'
-          //       color={!show ?  'muted.300' : "primary.400"}
-          //    />
-          // }
+          InputRightElement={
+            <Icon
+              as={<FontAwesome name="eye-slash" />}
+              size={5}
+              onPress={() => setShow(!show)}
+              mr="2"
+              color={!show ? 'muted.300' : 'primary.400'}
+            />
+          }
           onChangeText={TextInputValue =>
             setState({...state, password: TextInputValue})
           }
@@ -163,14 +164,14 @@ export const Login = props => {
         <Button py={4} onPress={login} size="sm">
           Login
         </Button>
-        <Button
+        {/* <Button
           fontWeight="bold"
           colorScheme="dark"
           onPress={forgot}
           size="md"
           variant="ghost">
           Forgot Password?
-        </Button>
+        </Button> */}
         <Button
           fontWeight="bold"
           colorScheme="secondary"

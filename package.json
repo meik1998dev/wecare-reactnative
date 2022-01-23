@@ -10,7 +10,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@logisticinfotech/react-native-payfort-sdk": "^1.0.16",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/eslint-config": "^2.0.0",

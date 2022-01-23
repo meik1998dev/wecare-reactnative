@@ -1,4 +1,4 @@
-import {Button, Text, View} from 'native-base';
+import {Button, Center, Text, View} from 'native-base';
 import React from 'react';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
@@ -11,7 +11,6 @@ const Splash = props => {
 
   const getToken = async () => {
     let fcmToken = await AsyncStorageLib.getItem('fcmToken');
-    console.log(fcmToken);
     if (!fcmToken) {
       let fcmToken = await messaging().getToken();
       if (fcmToken) {
@@ -34,14 +33,21 @@ const Splash = props => {
   };
 
   return (
-    <View>
-      <Button onPress={() => props.navigation.navigate('Doctor Login')}>
+    <Center flex={1} px="3">
+      <Text mb={5}>Welcome , Who are you?</Text>
+      <Button
+        mb={5}
+        w="70%"
+        onPress={() => props.navigation.navigate('Doctor Login')}>
         Doctor
       </Button>
-      <Button onPress={() => props.navigation.navigate('Login')}>
+      <Button
+        mb={5}
+        w="70%"
+        onPress={() => props.navigation.navigate('Login')}>
         Patiant
       </Button>
-    </View>
+    </Center>
   );
 };
 

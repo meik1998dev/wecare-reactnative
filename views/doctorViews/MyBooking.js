@@ -33,7 +33,7 @@ const MyBooking = props => {
         setState({...state, isLoding: false});
       });
   };
-  console.log(state);
+  console.log(state.data);
   return (
     <>
       {state.data ? (
@@ -41,16 +41,16 @@ const MyBooking = props => {
           <FlatList
             pt={5}
             width={'full'}
-            contentContainerStyle={{alignItems: 'center'}}
+            contentContainerStyle={{alignItems: 'center', paddingBottom: 30}}
             data={state.data}
             renderItem={({item}) => (
               <TouchableOpacity
                 style={{
                   alignItems: 'center',
-                  width: '100%',
+                  width: '95%',
                   height: 150,
                   elevation: 5,
-                  marginBottom: 5,
+                  marginBottom: 15,
                   borderRadius: 10,
                   shadowColor: 'rgba(0,0,0, .4)', // IOS
                   shadowOffset: {height: 1, width: 1}, // IOS
@@ -82,15 +82,19 @@ const MyBooking = props => {
                   <VStack space={2}>
                     <Text>{item.first_name}</Text>
                     <Text color={'gray.400'}>{item.title}</Text>
-                    <Badge colorScheme="warning">
+                    <Badge
+                      colorScheme={
+                        item.booking_type === 2 ? 'warning' : 'success'
+                      }>
                       {item.booking_type === 2 ? 'In place' : 'Online'}
                     </Badge>
                   </VStack>
                   <VStack alignItems={'center'} space={4}>
                     <Text fontWeight={'bold'} color={Colors.teal} fontSize={20}>
-                      {Moment(item.start_time).format('DD MMM')}
+                      {Moment(item.starting_time).format('DD MMM')}
                     </Text>
-                    <Text>{Moment(item.start_time).format('hh:mm A')}</Text>
+                    <Text> {Moment(item.starting_time).format('hh:mm A')}</Text>
+                    {/* <Text>{Moment(item.ending_time).format('hh:mm A')}</Text> */}
                   </VStack>
                 </Box>
               </TouchableOpacity>
@@ -98,7 +102,7 @@ const MyBooking = props => {
           />
         </View>
       ) : (
-        <Loader/>
+        <Loader />
       )}
     </>
   );

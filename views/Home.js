@@ -69,7 +69,7 @@ const Home = props => {
           borderRadius: 5,
           padding: 50,
           height: 120,
-          marginTop: 10
+          marginTop: 10,
         }}>
         <Image
           style={{width: '100%', height: '100%'}}
@@ -81,22 +81,24 @@ const Home = props => {
 
   const _renderCategoriesItem = ({item, index}) => {
     return (
-      <Box
-        shadow={1}
-        style={{
-          backgroundColor: Colors.white,
-          borderRadius: 100,
-          height: 140,
-          padding: 10,
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          marginVertical: 3,
-        }}>
-        <Image
-          style={{width: 70, height: 70, borderRadius: 100}}
-          alt="cat"
-          source={{uri: img_url + item.category_image}}></Image>
-        <Text>{item.category_name}</Text>
+      <Box>
+        <Box
+          shadow={1}
+          style={{
+            backgroundColor: Colors.white,
+            borderRadius: 100,
+            height: 140,
+            padding: 10,
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            marginVertical: 3,
+          }}>
+          <Image
+            style={{width: 132, height: 132, borderRadius: 100}}
+            alt="cat"
+            source={{uri: img_url + item.category_image}}></Image>
+        </Box>
+        <Text fontWeight='bold' mt={5} alignSelf="center">{item.category_name}</Text>
       </Box>
     );
   };
@@ -226,7 +228,7 @@ const Home = props => {
           </VStack>
         </ScrollView>
       ) : (
-        <Loader/>
+        <Loader />
       )}
     </>
   );

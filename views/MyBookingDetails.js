@@ -192,7 +192,7 @@ console.log(state);
             </Box>
           </Box>
         </Box>
-        {state.data.booking_type === 1 && (
+        {state.data.booking_type === 1 && state.data.booking_request_status !== 1 && (
           <Box
             mt={-38}
             flexDirection={'row'}

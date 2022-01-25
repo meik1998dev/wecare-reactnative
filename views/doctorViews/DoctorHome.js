@@ -19,7 +19,7 @@ import {useToast} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loader from '../../components/Loader';
 
-const DoctorHome = (props) => {
+const DoctorHome = props => {
   const [state, setState] = React.useState({
     isLoading: false,
     doctor_id: '',
@@ -124,7 +124,8 @@ const DoctorHome = (props) => {
           status: 'success',
           description: 'Thanks you.',
         });
-        props.navigation.navigate('Booking Details', {data: id});
+        getDetails()
+        // props.navigation.navigate('Booking Details', {data: id});
       })
       .catch(error => {
         setState({...state, isLoading: false});
@@ -135,6 +136,10 @@ const DoctorHome = (props) => {
 
   const popupActions = id => {
     Alert.alert('Choose Action', 'Accept an appointment', [
+      {
+        text: "Cancel",
+        style: "cancel"
+      },
       {
         text: 'accept',
         onPress: () => {

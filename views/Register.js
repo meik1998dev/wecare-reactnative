@@ -95,17 +95,19 @@ export const Register = props => {
         },
       })
         .then(async response => {
-          await props.serviceActionSuccess(response.data);
-          await saveData();
+          if (response.data.status !== 0) {
+            await saveData(response.data);
+          } else {
+            showToast(response.data.message, 'error');
+          }
         })
         .catch(error => {
           console.log(error);
-          props.serviceActionError(error);
         });
     }
   };
 
-  const fetchBloodList = async () => {
+  const fetchBloodList = async data => {
     const res = await axios({
       method: 'get',
       url: api_url + get_blood_list,
@@ -113,36 +115,33 @@ export const Register = props => {
     setBloodList(res.data.result);
   };
 
-  const saveData = async () => {
-    if (props.status == 1) {
-      try {
-        console.log(props.data.id);
-        await AsyncStorageLib.setItem('user_id', props.data.id.toString());
-        await AsyncStorageLib.setItem(
-          'first_name',
-          props.data.first_name.toString(),
-        );
-        await AsyncStorageLib.setItem(
-          'phone_number',
-          props.data.phone_number.toString(),
-        );
-        await AsyncStorageLib.setItem('email', props.data.email.toString());
-        global.id = await props.data.id;
-        global.first_name = await props.data.first_name;
-        global.phone_number = await props.data.phone_number;
-        global.email = await props.data.email;
-        console.log(global.email);
-        Alert.alert(
-          'Success',
-          'Your order has been successfully placed.',
-          [{text: 'OK', onPress: () => home()}],
-          {cancelable: false},
-        );
-      } catch (e) {
-        console.log('error');
-      }
-    } else {
-      alert(props.message);
+  const saveData = async data => {
+    try {
+      console.log(data);
+      await AsyncStorageLib.setItem('user_id', data.result.id.toString());
+      await AsyncStorageLib.setItem(
+        'first_name',
+        data.result.first_name.toString(),
+      );
+      await AsyncStorageLib.setItem(
+        'phone_number',
+        data.result.phone_number.toString(),
+      );
+      await AsyncStorageLib.setItem('email', data.result.email.toString());
+      global.id = await data.result.id;
+      global.first_name = await data.result.first_name;
+      global.phone_number = await data.result.phone_number;
+      global.email = await data.result.email;
+      console.log(global.email);
+      Alert.alert(
+        'Success',
+        'Your are registered successfully .',
+        [{text: 'OK', onPress: () => home()}],
+        {cancelable: false},
+      );
+    } catch (e) {
+      console.log(e);
+      console.log('error');
     }
   };
 

@@ -48,7 +48,7 @@ const DoctorsList = props => {
         <Loader />
       ) : (
         <VStack p={5}>
-          <Box>
+          <Box pb={5}>
             <Text fontSize={20} color={Colors.teal}>
               Choose a doctor
             </Text>
@@ -57,7 +57,9 @@ const DoctorsList = props => {
             <ScrollView
               contentContainerStyle={{alignItems: 'center'}}
               w={'full'}
-              pt={5}>
+              pt={5}
+              mb={10}
+              pb={20}>
               {state.result.map(
                 ({
                   doctor_name,
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
   doctorCard: {
     backgroundColor: Colors.white,
     width: '99%',
-    marginVertical: 10,
+    marginBottom: 25,
     borderRadius: 10,
     padding: 10,
     height: 150,

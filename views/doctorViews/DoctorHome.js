@@ -19,7 +19,7 @@ import {useToast} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loader from '../../components/Loader';
 
-const DoctorHome = () => {
+const DoctorHome = (props) => {
   const [state, setState] = React.useState({
     isLoading: false,
     doctor_id: '',
@@ -119,16 +119,12 @@ const DoctorHome = () => {
     })
       .then(async response => {
         setState({...state, isLoading: false});
-        console.log(response.data);
         toast.show({
           title: 'Book Accepted',
           status: 'success',
           description: 'Thanks you.',
         });
-        let item = {
-          id: id,
-        };
-        props.navigation.navigate('Booking Details', {data: item});
+        props.navigation.navigate('Booking Details', {data: id});
       })
       .catch(error => {
         setState({...state, isLoading: false});

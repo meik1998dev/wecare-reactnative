@@ -1124,6 +1124,11 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
+"@paytabs/react-native-paytabs@2.3.9":
+  version "2.3.9"
+  resolved "https://registry.yarnpkg.com/@paytabs/react-native-paytabs/-/react-native-paytabs-2.3.9.tgz#99d225c088002a58b2451b5c3950accad6080b93"
+  integrity sha512-tgJayCpqw01ssZP4AFDtzS7+JxLOOZlD/5QZ8AZ+W3+U2bJ4umRSpFJ1jzqjEtXxKlLuHU9sM7mwYnZ6hS/0iw==
+
 "@react-aria/checkbox@^3.2.1":
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/@react-aria/checkbox/-/checkbox-3.2.3.tgz#be7f1f881e6d0fb554b5b20b9243e31e222207d5"

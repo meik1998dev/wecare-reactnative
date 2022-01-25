@@ -182,7 +182,7 @@ export default Chat = props => {
     );
   };
 
-  console.log(global.first_name);
+console.log(global.doctor_name);
   return (
     <View style={{flex: 1}}>
       <GiftedChat

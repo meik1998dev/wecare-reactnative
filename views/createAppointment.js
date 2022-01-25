@@ -20,6 +20,13 @@ import {
   check_available_timing,
   create_booking,
 } from '../config/Constants';
+import {
+  RNPaymentSDKLibrary,
+  PaymentSDKConfiguration,
+  PaymentSDKBillingDetails,
+  PaymentSDKTheme,
+  PaymentSDKConstants,
+} from '@paytabs/react-native-paytabs';
 
 const createAppointment = props => {
   const [state, setState] = React.useState({
@@ -115,46 +122,48 @@ const createAppointment = props => {
     props.navigation.navigate('My Orders');
   };
 
-  const onPay = async () => {
-    await RNPayFort({
-      command: 'PURCHASE',
-      access_code: 'xxxxxxxxxxxxxxxxxx',
-      merchant_identifier: 'xxxxxxxxxx',
-      sha_request_phrase: 'xxxxxxxxxxxxxxxxxx',
-      amount: 100,
-      currencyType: 'SAR',
-      language: 'en',
-      email: 'naishadh@logisticinfotech.co.in',
-      testing: true,
-    })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  let billingDetails = new PaymentSDKBillingDetails();
+  billingDetails.name = global.first_name;
+  billingDetails.email =  global.email;
+  billingDetails.phone = global.phone_number;
+  billingDetails.addressLine = global.address;
+  billingDetails.city = 'Dubai';
+  billingDetails.state = 'Dubai';
+  billingDetails.countryCode = 'sar'; // ISO alpha 2
+  billingDetails.zip = '1234';
 
-  const make_payment = () => {
-    var options = {
-      currency: global.currency_short_code,
-      key: global.razorpay_key,
-      amount: state.price_per_conversation * 100,
-      name: global.application_name,
-      prefill: {
-        email: global.email,
-        contact: global.phone_number,
-        name: global.customer_name,
+  let configuration = new PaymentSDKConfiguration();
+  configuration.profileID = '*your profile id*';
+  configuration.serverKey = '*server key*';
+  configuration.clientKey = '*client key*';
+  configuration.cartID = '545454';
+  configuration.currency = 'AED';
+  configuration.cartDescription = 'Flowers';
+  configuration.merchantCountryCode = 'ae';
+  configuration.merchantName = 'Flowers Store';
+  configuration.amount = 20;
+  configuration.screenTitle = 'Pay with Card';
+  configuration.billingDetails = billingDetails;
+  configuration.forceShippingInfo = false;
+  configuration.showBillingInfo = true;
+
+  const onPay = async () => {
+    RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then(
+      result => {
+        if (result['PaymentDetails'] != null) {
+          // Handle transaction details
+          let paymentDetails = result['PaymentDetails'];
+          console.log(paymentDetails);
+        } else if (result['Event'] == 'CancelPayment') {
+          // Handle events
+          console.log('Cancel Payment Event');
+        }
       },
-      theme: {color: colors.theme_fg},
-    };
-    // RazorpayCheckout.open(options)
-    //    .then(() => {
-    //       createBooking();
-    //    })
-    //    .catch((error) => {
-    //       alert('Your transaction declined');
-    //    });
+      function (error) {
+        // Handle error
+        console.log(error);
+      },
+    );
   };
 
   const showDeliveryDatePicker = () => {
@@ -269,7 +278,7 @@ const createAppointment = props => {
         />
       </Box>
       <Button
-        onPress={check_timing}
+        onPress={createBooking}
         mt={7}
         rounded="xl"
         px={10}

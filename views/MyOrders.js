@@ -107,7 +107,7 @@ const MyOrders = props => {
       <FlatList
         pt={5}
         width={'full'}
-        contentContainerStyle={{alignItems: 'center'}}
+        contentContainerStyle={{alignItems: 'center' }}
         data={props.bookings}
         renderItem={({item}) => (
           <TouchableOpacity
@@ -116,7 +116,7 @@ const MyOrders = props => {
               width: '100%',
               height: 150,
               elevation: 5,
-              marginBottom: 5,
+              marginBottom: 20,
               borderRadius: 10,
               shadowColor: 'rgba(0,0,0, .4)', // IOS
               shadowOffset: {height: 1, width: 1}, // IOS

@@ -39,6 +39,7 @@ console.log(state);
   const navigateToVideo = () => {
     props.navigation.navigate('Video', {data: state.data});
   };
+  console.log(state.data.booking_type);
 
   return (
     <Box w={'100%'}>

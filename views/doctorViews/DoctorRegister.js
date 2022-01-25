@@ -65,7 +65,7 @@ const DoctorRegister = props => {
           phone_number: state.phone_number,
           username: state.username,
           password: state.password,
-          fcm_token:global.fcm_token
+          fcm_token: global.fcm_token,
         },
       })
         .then(async response => {
@@ -109,7 +109,7 @@ const DoctorRegister = props => {
         global.profile_status = await data.result.profile_status;
         global.document_update_status = await data.result
           .document_update_status;
-        await home();
+        home();
       } catch (e) {
         console.log(data);
         console.log(e);

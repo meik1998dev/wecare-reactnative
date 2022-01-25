@@ -34,8 +34,6 @@ export const Login = props => {
     Keyboard.dismiss();
     await checkValidate();
     if (state.validation) {
-      props.serviceActionPending();
-      console.log(state.fcm_token);
       await axios({
         method: 'post',
         url: api_url + login_url,
@@ -46,15 +44,18 @@ export const Login = props => {
         },
       })
         .then(async response => {
-          setState({...state, isLoding: false});
-          await props.serviceActionSuccess(response.data);
-          console.log(response.data);
-          await saveData(response.data);
+          if (response.data.status !== 0) {
+            console.log(response.data);
+            setState({...state, isLoding: false});
+            await saveData(response.data);
+          } else {
+            showToast(response.data.message, 'error');
+          }
         })
         .catch(error => {
+          alert(error);
           setState({...state, isLoding: false});
           console.log(error);
-          alert(error);
           props.serviceActionError(error);
         });
     }

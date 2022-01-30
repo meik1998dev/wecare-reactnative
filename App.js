@@ -34,6 +34,8 @@ import DoctorHome from './views/doctorViews/DoctorHome.js';
 import DoctorVideoCall from './views/doctorViews/DoctorVideo.js';
 import DoctorsList from './views/DoctorsList.js';
 import createAppointment from './views/createAppointment.js';
+import {PhoneVerification} from './views/PhoneVerification.js';
+import { DoctorPhoneVerification } from './views/doctorViews/PhoneVerification.js';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -82,10 +84,6 @@ const MyTheme = {
   },
 };
 
-LogBox.ignoreLogs([
-  "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-]);
-
 export default function App() {
   return (
     <Provider store={store}>
@@ -100,12 +98,14 @@ export default function App() {
               name="Splash"
               component={Splash}
             />
-            <Stack.Screen name="Doctor Home" component={DoctorNavigator} />   
+            <Stack.Screen name="Doctor Home" component={DoctorNavigator} />
             <Stack.Screen name="HomeStack" component={CustomerNavigator} />
             <Stack.Screen name="Doctor Login" component={DoctorLogin} />
             <Stack.Screen name="Doctor Register" component={DoctorRegister} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Phone Verify" component={PhoneVerification} />
+            <Stack.Screen name="Doctor Phone Verify" component={DoctorPhoneVerification} />
             <Stack.Screen
               name="My Booking Details"
               component={MyBookingDetails}
@@ -114,7 +114,10 @@ export default function App() {
               name="Booking Details"
               component={MyBookingsDetails}
             />
-            <Stack.Screen name="Create Appointment" component={createAppointment} />
+            <Stack.Screen
+              name="Create Appointment"
+              component={createAppointment}
+            />
             <Stack.Screen name="Video" component={VideoCall} />
             <Stack.Screen name="DoctorsList" component={DoctorsList} />
             <Stack.Screen name="Chat" component={Chat} />

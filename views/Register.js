@@ -22,7 +22,6 @@ import {
   serviceActionSuccess,
 } from '../actions/RegisterActions';
 import {Colors} from '../assets/Colors';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
 
 export const Register = props => {
   const [state, setState] = React.useState({
@@ -51,7 +50,6 @@ export const Register = props => {
     toast.show({
       title: msg,
       status: status,
-      //  duration: Snackbar.LENGTH_SHORT,
     });
   };
 
@@ -63,23 +61,17 @@ export const Register = props => {
     props.navigation.navigate('Login');
   };
 
-  const home = () => {
-    props.navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{name: 'HomeStack'}],
-      }),
-    );
+  const navigtateToPhoneVerify = () => {
+    props.navigation.navigate('Phone Verify' , {state: state});
   };
 
   const register = async () => {
     Keyboard.dismiss();
     checkValidate();
     if (state.validation) {
-      props.serviceActionPending();
       await axios({
         method: 'post',
-        url: api_url + register_url,
+        url: api_url + 'customer/check_credentials',
         data: {
           first_name: state.first_name,
           last_name: state.last_name,
@@ -91,12 +83,11 @@ export const Register = props => {
           address: state.address,
           password: state.password,
           blood_group: state.blood_group,
-          fcm_token: state.fcm_token,
         },
       })
         .then(async response => {
-          if (response.data.status !== 0) {
-            await saveData(response.data);
+          if (response.data.status !== "0") {
+            navigtateToPhoneVerify();
           } else {
             showToast(response.data.message, 'error');
           }
@@ -113,36 +104,6 @@ export const Register = props => {
       url: api_url + get_blood_list,
     });
     setBloodList(res.data.result);
-  };
-
-  const saveData = async data => {
-    try {
-      console.log(data);
-      await AsyncStorageLib.setItem('user_id', data.result.id.toString());
-      await AsyncStorageLib.setItem(
-        'first_name',
-        data.result.first_name.toString(),
-      );
-      await AsyncStorageLib.setItem(
-        'phone_number',
-        data.result.phone_number.toString(),
-      );
-      await AsyncStorageLib.setItem('email', data.result.email.toString());
-      global.id = await data.result.id;
-      global.first_name = await data.result.first_name;
-      global.phone_number = await data.result.phone_number;
-      global.email = await data.result.email;
-      console.log(global.email);
-      Alert.alert(
-        'Success',
-        'Your are registered successfully .',
-        [{text: 'OK', onPress: () => home()}],
-        {cancelable: false},
-      );
-    } catch (e) {
-      console.log(e);
-      console.log('error');
-    }
   };
 
   const checkValidate = () => {

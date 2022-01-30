@@ -98,7 +98,9 @@ const Home = props => {
             alt="cat"
             source={{uri: img_url + item.category_image}}></Image>
         </Box>
-        <Text fontWeight='bold' mt={5} alignSelf="center">{item.category_name}</Text>
+        <Text fontWeight="bold" mt={5} alignSelf="center">
+          {item.category_name}
+        </Text>
       </Box>
     );
   };
@@ -181,13 +183,17 @@ const Home = props => {
                           borderRadius: 25,
                           height: 140,
                           width: 160,
-                          padding: 20,
                           marginHorizontal: 20,
                           justifyContent: 'space-around',
                           alignItems: 'center',
                         }}>
                         <Image
-                          style={{width: 50, height: 50, borderRadius: 100}}
+                          style={{
+                            width: 150,
+                            height: 105,
+                            borderTopRightRadius: 25,
+                            borderTopLeftRadius: 25,
+                          }}
                           source={{uri: img_url + item.profile_image}}
                         />
                         <Text>{item.doctor_name}</Text>

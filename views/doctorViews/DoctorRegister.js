@@ -33,16 +33,18 @@ const DoctorRegister = props => {
   });
 
   const toast = useToast();
+
   const showToast = (msg, status) => {
     toast.show({
       title: msg,
       status: status,
-      //  duration: Snackbar.LENGTH_SHORT,
     });
   };
+
   const login = () => {
-    props.navigation.navigate('Login');
+    props.navigation.navigate('Doctor Login');
   };
+
   const home = () => {
     props.navigation.dispatch(
       CommonActions.reset({
@@ -51,13 +53,14 @@ const DoctorRegister = props => {
       }),
     );
   };
+  
   const register = async () => {
     Keyboard.dismiss();
     checkValidate();
     if (state.validation) {
       await axios({
         method: 'post',
-        url: api_url + 'doctor/register',
+        url: api_url + 'doctor/check_credentials',
         data: {
           doctor_name: state.doctor_name,
           qualification: state.qualification,
@@ -69,53 +72,16 @@ const DoctorRegister = props => {
         },
       })
         .then(async response => {
-          await saveData(response.data);
+          if (response.data.status !== "0") {
+            props.navigation.navigate('Doctor Phone Verify' , {state: state});
+          }
+          else {
+            showToast(response.data.message, 'error');
+          }
         })
         .catch(error => {
           console.log(error);
         });
-    }
-  };
-  const saveData = async data => {
-    if (data.status == 1) {
-      try {
-        await AsyncStorageLib.setItem('id', data.result.id.toString());
-        await AsyncStorageLib.setItem(
-          'doctor_name',
-          data.result.doctor_name.toString(),
-        );
-        await AsyncStorageLib.setItem(
-          'qualification',
-          data.result.qualification.toString(),
-        );
-        await AsyncStorageLib.setItem(
-          'phone_number',
-          data.result.phone_number.toString(),
-        );
-        await AsyncStorageLib.setItem('email', data.result.email.toString());
-        await AsyncStorageLib.setItem(
-          'profile_status',
-          data.result.profile_status.toString(),
-        );
-        await AsyncStorageLib.setItem(
-          'document_update_status',
-          data.result.document_update_status.toString(),
-        );
-        global.doctor_name = await data.result.doctor_name;
-        global.qualification = await data.result.qualification;
-        global.phone_number = await data.result.phone_number;
-        global.email = await data.result.email;
-        global.id = await data.result.id;
-        global.profile_status = await data.result.profile_status;
-        global.document_update_status = await data.result
-          .document_update_status;
-        home();
-      } catch (e) {
-        console.log(data);
-        console.log(e);
-      }
-    } else {
-      alert(data.message);
     }
   };
 

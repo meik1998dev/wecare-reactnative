@@ -125,7 +125,6 @@ const DoctorHome = props => {
           description: 'Thanks you.',
         });
         getDetails()
-        // props.navigation.navigate('Booking Details', {data: id});
       })
       .catch(error => {
         setState({...state, isLoading: false});

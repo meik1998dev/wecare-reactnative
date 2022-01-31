@@ -2,7 +2,12 @@ import axios from 'axios';
 import {Box, Button, Container, Text, View, VStack} from 'native-base';
 import React from 'react';
 import {Colors} from '../assets/Colors';
-import {api_url, booking_details, doctorthree, img_url} from '../config/Constants';
+import {
+  api_url,
+  booking_details,
+  doctorthree,
+  img_url,
+} from '../config/Constants';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Moment from 'moment';
 import {Image} from 'react-native';
@@ -15,7 +20,7 @@ const MyBookingDetails = props => {
   React.useEffect(() => {
     getBookingDetails();
   }, []);
-console.log(state);
+  console.log(state);
   const getBookingDetails = async () => {
     await axios({
       method: 'post',
@@ -37,7 +42,7 @@ console.log(state);
   };
 
   const navigateToVideo = () => {
-    props.navigation.navigate('Video', {data: state.data});
+    props.navigation.navigate('Video', {booking_id: state.data.booking_id});
   };
   console.log(state.data.booking_type);
 
@@ -61,7 +66,7 @@ console.log(state);
             borderRadius: 100,
           }}
           source={{
-            uri: img_url+state.data.profile_image,
+            uri: img_url + state.data.profile_image,
           }}
         />
       </View>
@@ -192,41 +197,48 @@ console.log(state);
             </Box>
           </Box>
         </Box>
-        {state.data.booking_type === 1 && state.data.booking_request_status !== 1 && (
-          <Box
-            mt={-38}
-            flexDirection={'row'}
-            justifyContent={'space-around'}
-            w={'full'}>
-            <Button
-              onPress={navigateToChat}
-              shadow="2"
-              alignItems={'center'}
-              py={4}
-              rounded="xl">
-              <Box w={20} justifyContent={'space-around'} flexDirection={'row'}>
-                <FontAwesome name="comments" size={20} color="white" />
-                <Text fontWeight={'bold'} color={Colors.white}>
-                  Chat
-                </Text>
-              </Box>
-            </Button>
-            <Button
-            onPress={navigateToVideo}
-              alignItems={'center'}
-              shadow="2"
-              colorScheme={'secondary'}
-              py={4}
-              rounded="xl">
-              <Box w={20} justifyContent={'space-around'} flexDirection={'row'}>
-                <FontAwesome name="video-camera" size={20} color="white" />
-                <Text fontWeight={'bold'} color={'white'}>
-                  Video
-                </Text>
-              </Box>
-            </Button>
-          </Box>
-        )}
+        {state.data.booking_type === 1 &&
+          state.data.booking_request_status !== 1 && (
+            <Box
+              mt={-38}
+              flexDirection={'row'}
+              justifyContent={'space-around'}
+              w={'full'}>
+              <Button
+                onPress={navigateToChat}
+                shadow="2"
+                alignItems={'center'}
+                py={4}
+                rounded="xl">
+                <Box
+                  w={20}
+                  justifyContent={'space-around'}
+                  flexDirection={'row'}>
+                  <FontAwesome name="comments" size={20} color="white" />
+                  <Text fontWeight={'bold'} color={Colors.white}>
+                    Chat
+                  </Text>
+                </Box>
+              </Button>
+              <Button
+                onPress={navigateToVideo}
+                alignItems={'center'}
+                shadow="2"
+                colorScheme={'secondary'}
+                py={4}
+                rounded="xl">
+                <Box
+                  w={20}
+                  justifyContent={'space-around'}
+                  flexDirection={'row'}>
+                  <FontAwesome name="video-camera" size={20} color="white" />
+                  <Text fontWeight={'bold'} color={'white'}>
+                    Video
+                  </Text>
+                </Box>
+              </Button>
+            </Box>
+          )}
       </VStack>
     </Box>
   );

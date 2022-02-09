@@ -112,7 +112,7 @@ const Home = props => {
       {!state.isLoding ? (
         <ScrollView>
           <VStack
-            space={12}
+            space={8}
             alignItems={'center'}
             style={{flex: 1, paddingTop: 20}}>
             <View style={{justifyContent: 'center', flexDirection: 'row'}}>

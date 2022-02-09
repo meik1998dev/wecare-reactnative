@@ -38,8 +38,13 @@ const MyBooking = props => {
     <>
       {state.data ? (
         <View flex={1}>
+          <Box p={5}>
+            <Text fontSize={20} color={Colors.teal}>
+              My Bookings
+            </Text>
+          </Box>
           <FlatList
-            pt={5}
+            pt={1}
             width={'full'}
             contentContainerStyle={{alignItems: 'center', paddingBottom: 30}}
             data={state.data}

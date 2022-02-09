@@ -1,4 +1,5 @@
-import {Button, Text, View} from 'native-base';
+import axios from 'axios';
+import {Button, Center, Text, View} from 'native-base';
 import React, {Component, useRef} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {
@@ -6,6 +7,7 @@ import {
   TwilioVideoParticipantView,
   TwilioVideo,
 } from 'react-native-twilio-video-webrtc';
+import {api_url} from '../../config/Constants';
 
 const DoctorVideoCall = props => {
   const [isAudioEnabled, setIsAudioEnabled] = React.useState(true);
@@ -16,10 +18,34 @@ const DoctorVideoCall = props => {
   const [token, setToken] = React.useState('');
   const twilioRef = useRef(null);
   console.log(status);
+
+  React.useEffect(() => {
+    getAccessTokenFromServer();
+  }, []);
+
+  const getAccessTokenFromServer = async () => {
+    await axios({
+      method: 'get',
+      url:
+        api_url +
+        'get_access_token_for_video' +
+        '/' +
+        props.route.params.booking_id,
+    })
+      .then(async response => {
+        console.log(response.data);
+        // this.setState({isLoading: false});
+        setToken(response.data.result);
+      })
+      .catch(error => {
+        console.log(error);
+        // this.setState({isLoading: false});
+      });
+  };
+
   const _onConnectButtonPress = () => {
     twilioRef.current.connect({
-      accessToken:
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzIwODMyZmZmZTg1ZDVhYjFlMzkzOGIwN2FiZWRkNmYwLTE2NDI4OTA1NzUiLCJpc3MiOiJTSzIwODMyZmZmZTg1ZDVhYjFlMzkzOGIwN2FiZWRkNmYwIiwic3ViIjoiQUNlMzhhNjA3NGQxZmYxNGI1ODUxMmUyMTdhNWVjMTgwNiIsImV4cCI6MTY0Mjg5NDE3NSwiZ3JhbnRzIjp7ImlkZW50aXR5IjoicGFydG5lcl8xNjQyODkwNTc1IiwidmlkZW8iOnsicm9vbSI6IjcifX19.vNteq2MwIy34Dbs2E2VnQ1coI6ymU3gftLGNGyFfvj8',
+      accessToken: token,
     });
     setStatus('connecting');
   };
@@ -82,22 +108,15 @@ const DoctorVideoCall = props => {
   return (
     <View style={styles.container}>
       {status === 'disconnected' && (
-        <View>
-          <Text style={styles.welcome}>React Native Twilio Video</Text>
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            value={token}
-            onChangeText={text => setToken(text)}></TextInput>
-          <Button
-            title="Connect"
-            style={styles.button}
-            onPress={_onConnectButtonPress}></Button>
-        </View>
+        <Center flex={1}>
+          <View>
+            <Button onPress={_onConnectButtonPress}>Connect</Button>
+          </View>
+        </Center>
       )}
 
       {(status === 'connected' || status === 'connecting') && (
-        <View   >
+        <View>
           {status === 'connected' && (
             <View style={styles.remoteGrid}>
               {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
@@ -129,7 +148,10 @@ const DoctorVideoCall = props => {
               onPress={_onFlipButtonPress}>
               <Text style={{fontSize: 12}}>Flip</Text>
             </TouchableOpacity>
-            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+            <TwilioVideoLocalView
+              style={styles.localVideoOnButtonDisabled}
+              enabled={true}
+            />
           </View>
         </View>
       )}
@@ -145,5 +167,115 @@ const DoctorVideoCall = props => {
     </View>
   );
 };
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  callContainer: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    minHeight: '100%',
+  },
+  welcome: {
+    fontSize: 30,
+    textAlign: 'center',
+    paddingTop: 40,
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    marginRight: 70,
+    marginLeft: 70,
+    marginTop: 50,
+    textAlign: 'center',
+    backgroundColor: 'white',
+  },
+  button: {
+    marginTop: 100,
+  },
+  localVideoOnButtonEnabled: {
+    bottom: '40%',
+    width: '35%',
+    left: '64%',
+    height: '25%',
+    zIndex: 2,
+  },
+  localVideoOnButtonDisabled: {
+    bottom: '30%',
+    width: '35%',
+    left: '64%',
+    height: '25%',
+    zIndex: 2,
+  },
+  remoteGrid: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  remoteVideo: {
+    width: '100%',
+    height: 800,
+    // zIndex: 1,
+    position: 'absolute',
+  },
+  optionsContainer: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: 100,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    zIndex: 2,
+  },
+  optionButton: {
+    width: 60,
+    height: 60,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 100 / 2,
+    backgroundColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  spacing: {
+    padding: 10,
+  },
+  inputLabel: {
+    fontSize: 18,
+  },
+  buttonContainer: {
+    // height: normalize(45),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: '90%',
+    borderRadius: 30,
+  },
+  loginButton: {
+    backgroundColor: '#1E3378',
+    width: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  Buttontext: {
+    color: 'white',
+    fontWeight: '500',
+    fontSize: 18,
+  },
+  inputBox: {
+    borderBottomColor: '#cccccc',
+    fontSize: 16,
+    width: '95%',
+    borderBottomWidth: 1,
+  },
+});
 export default DoctorVideoCall;

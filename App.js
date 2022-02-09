@@ -123,7 +123,7 @@ export default function App() {
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="My Orders" component={MyOrders} />
             <Stack.Screen name="Doctor Chat" component={DoctorChat} />
-            <Stack.Screen name="Doctor Video" component={DoctorVideoCall} />
+            <Stack.Screen name="DoctorVideo" component={DoctorVideoCall} />
           </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>

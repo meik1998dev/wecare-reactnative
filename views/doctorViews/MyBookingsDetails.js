@@ -92,6 +92,7 @@ export default class BookingRequest extends Component {
   };
 
   render() {
+    console.log(this.state.data);
     return (
       <Box w={'100%'}>
         <View>

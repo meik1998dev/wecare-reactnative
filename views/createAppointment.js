@@ -10,7 +10,6 @@ import {
 } from 'native-base';
 import React from 'react';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-// import { EvilIcons } from '@expo/vector-icons';
 import {Colors} from '../assets/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Alert, StyleSheet} from 'react-native';
@@ -42,9 +41,6 @@ const createAppointment = props => {
     isLoding: false,
   });
 
-  console.log(props.route.params.type);
-
-  console.log(state.doctor_id);
   const createBooking = async () => {
     setState({...state, isLoding: true});
     console.log(state);
@@ -124,7 +120,7 @@ const createAppointment = props => {
 
   let billingDetails = new PaymentSDKBillingDetails();
   billingDetails.name = global.first_name;
-  billingDetails.email =  global.email;
+  billingDetails.email = global.email;
   billingDetails.phone = global.phone_number;
   billingDetails.addressLine = global.address;
   billingDetails.city = 'Dubai';
@@ -206,6 +202,11 @@ const createAppointment = props => {
 
   return (
     <VStack space={5} px={5} py={35}>
+      <Box pb={5}>
+        <Text fontSize={20} color={Colors.teal}>
+          Create Appointment
+        </Text>
+      </Box>
       <Box
         rounded="xl"
         flexDirection={'column'}
@@ -302,13 +303,3 @@ const styles = StyleSheet.create({
 });
 
 export default createAppointment;
-
-// The main details needed are:
-
-// 1- Merchant profile ID (profile_id)
-// 2- Item cost (cart_amount)
-// 3- Currency (cart_currency): Must be 3 Character ISO currency code
-// 4- Description (cart_description)
-// 5- Unique order reference (cart_id)
-// 6- Either the callback URL (callback) or the return URL (return) for your store (these URLs will only be used if the transaction required any form of browser redirection)
-// 7- Transaction Type (tran_type)

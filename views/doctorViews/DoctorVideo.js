@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Button, Text, View} from 'native-base';
+import {Button, Center, Text, View} from 'native-base';
 import React, {Component, useRef} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {
@@ -107,71 +107,64 @@ const DoctorVideoCall = props => {
 
   return (
     <View style={styles.container}>
-    {status === 'disconnected' && (
-      <View>
-        <Text style={styles.welcome}>React Native Twilio Video</Text>
-        <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          value={token}
-          onChangeText={text => setToken(text)}></TextInput>
-        <Button
-          title="Connect"
-          style={styles.button}
-          onPress={_onConnectButtonPress}></Button>
-      </View>
-    )}
-
-    {(status === 'connected' || status === 'connecting') && (
-      <View>
-        {status === 'connected' && (
-          <View style={styles.remoteGrid}>
-            {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
-              return (
-                <TwilioVideoParticipantView
-                  style={styles.remoteVideo}
-                  key={trackSid}
-                  trackIdentifier={trackIdentifier}
-                />
-              );
-            })}
+      {status === 'disconnected' && (
+        <Center flex={1}>
+          <View>
+            <Button onPress={_onConnectButtonPress}>Connect</Button>
           </View>
-        )}
-        <View style={{width: 500, height: 500}}>
-          <TouchableOpacity
-            style={styles.optionButton}
-            onPress={_onEndButtonPress}>
-            <Text style={{fontSize: 12}}>End</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.optionButton}
-            onPress={_onMuteButtonPress}>
-            <Text style={{fontSize: 12}}>
-              {isAudioEnabled ? 'Mute' : 'Unmute'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.optionButton}
-            onPress={_onFlipButtonPress}>
-            <Text style={{fontSize: 12}}>Flip</Text>
-          </TouchableOpacity>
-          <TwilioVideoLocalView
-            style={styles.localVideoOnButtonDisabled}
-            enabled={true}
-          />
-        </View>
-      </View>
-    )}
+        </Center>
+      )}
 
-    <TwilioVideo
-      ref={twilioRef}
-      onRoomDidConnect={_onRoomDidConnect}
-      onRoomDidDisconnect={_onRoomDidDisconnect}
-      onRoomDidFailToConnect={_onRoomDidFailToConnect}
-      onParticipantAddedVideoTrack={_onParticipantAddedVideoTrack}
-      onParticipantRemovedVideoTrack={_onParticipantRemovedVideoTrack}
-    />
-  </View>
+      {(status === 'connected' || status === 'connecting') && (
+        <View>
+          {status === 'connected' && (
+            <View style={styles.remoteGrid}>
+              {Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
+                return (
+                  <TwilioVideoParticipantView
+                    style={styles.remoteVideo}
+                    key={trackSid}
+                    trackIdentifier={trackIdentifier}
+                  />
+                );
+              })}
+            </View>
+          )}
+          <View style={{width: 500, height: 500}}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={_onEndButtonPress}>
+              <Text style={{fontSize: 12}}>End</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={_onMuteButtonPress}>
+              <Text style={{fontSize: 12}}>
+                {isAudioEnabled ? 'Mute' : 'Unmute'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={_onFlipButtonPress}>
+              <Text style={{fontSize: 12}}>Flip</Text>
+            </TouchableOpacity>
+            <TwilioVideoLocalView
+              style={styles.localVideoOnButtonDisabled}
+              enabled={true}
+            />
+          </View>
+        </View>
+      )}
+
+      <TwilioVideo
+        ref={twilioRef}
+        onRoomDidConnect={_onRoomDidConnect}
+        onRoomDidDisconnect={_onRoomDidDisconnect}
+        onRoomDidFailToConnect={_onRoomDidFailToConnect}
+        onParticipantAddedVideoTrack={_onParticipantAddedVideoTrack}
+        onParticipantRemovedVideoTrack={_onParticipantRemovedVideoTrack}
+      />
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -224,7 +217,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   remoteVideo: {
-    width: "100%",
+    width: '100%',
     height: 800,
     // zIndex: 1,
     position: 'absolute',

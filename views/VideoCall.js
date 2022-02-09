@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Button, Text, View} from 'native-base';
+import {Button, Center, Text, View} from 'native-base';
 import React, {Component, useRef} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {
@@ -109,18 +109,13 @@ const DoctorVideoCall = props => {
   return (
     <View style={styles.container}>
       {status === 'disconnected' && (
-        <View>
-          <Text style={styles.welcome}>React Native Twilio Video</Text>
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            value={token}
-            onChangeText={text => setToken(text)}></TextInput>
-          <Button
-            title="Connect"
-            style={styles.button}
-            onPress={_onConnectButtonPress}></Button>
-        </View>
+        <Center flex={1}>
+          <View>
+            <Button  onPress={_onConnectButtonPress}>
+              Connect
+            </Button>
+          </View>
+        </Center>
       )}
 
       {(status === 'connected' || status === 'connecting') && (
@@ -205,6 +200,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 100,
+    width: '50%',
   },
   localVideoOnButtonEnabled: {
     bottom: '40%',
@@ -225,7 +221,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   remoteVideo: {
-    width: "100%",
+    width: '100%',
     height: 800,
     // zIndex: 1,
     position: 'absolute',

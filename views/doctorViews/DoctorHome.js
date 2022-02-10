@@ -1,15 +1,6 @@
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {
-  Badge,
-  Box,
-  Container,
-  FlatList,
-  ScrollView,
-  Text,
-  View,
-  VStack,
-} from 'native-base';
+import {Badge, Box, FlatList, ScrollView, Text, VStack} from 'native-base';
 import React from 'react';
 import {Alert, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {Colors} from '../../assets/Colors';
@@ -18,6 +9,7 @@ import Moment from 'moment';
 import {useToast} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loader from '../../components/Loader';
+import noDataSVG from '../../assets/img/delete.png';
 
 const DoctorHome = props => {
   const [state, setState] = React.useState({
@@ -61,27 +53,6 @@ const DoctorHome = props => {
       });
   };
 
-  // const getProfile = async () => {
-  //   const id = await AsyncStorageLib.getItem('id');
-  //   console.log(id);
-  //   setState({...state, isLoading: true});
-  //   await axios({
-  //     method: 'post',
-  //     url: api_url + 'doctor/get_profile',
-  //     data: {doctor_id: id},
-  //   })
-  //     .then(async response => {
-  //       setState({...state, isLoading: false});
-  //       console.log(response.data);
-  //       //   check_settings(response.data);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //       setState({...state, isLoading: false});
-  //       alert('Sorry, something went wrong');
-  //     });
-  // };
-
   const check_settings = async data => {
     try {
       await AsyncStorageLib.setItem(
@@ -124,7 +95,7 @@ const DoctorHome = props => {
           status: 'success',
           description: 'Thanks you.',
         });
-        getDetails()
+        getDetails();
       })
       .catch(error => {
         setState({...state, isLoading: false});
@@ -136,8 +107,8 @@ const DoctorHome = props => {
   const popupActions = id => {
     Alert.alert('Choose Action', 'Accept an appointment', [
       {
-        text: "Cancel",
-        style: "cancel"
+        text: 'Cancel',
+        style: 'cancel',
       },
       {
         text: 'accept',
@@ -189,9 +160,16 @@ const DoctorHome = props => {
               </Text>
             </Box>
             {state.bookings.length === 0 && (
-              <Text alignSelf={'center'} mt={20} fontSize={16}>
-                No Pending Bookings
-              </Text>
+              <Box mt={20} alignItems={'center'} flexDirection={'column'}>
+                <Image style={{width: 150, height: 150}} source={noDataSVG} />
+                <Text
+                  mt={5}
+                  fontWeight={'bold'}
+                  alignSelf={'center'}
+                  fontSize={20}>
+                  No Pending Bookings
+                </Text>
+              </Box>
             )}
             <FlatList
               data={state.bookings}

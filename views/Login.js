@@ -124,7 +124,6 @@ export const Login = props => {
     toast.show({
       title: msg,
       status: status,
-      //  duration: Snackbar.LENGTH_SHORT,
     });
   };
 
@@ -132,6 +131,7 @@ export const Login = props => {
     <Center flex={1} px="3">
       <Stack space={4} width={'80%'}>
         <Input
+          rounded={'lg'}
           placeholder="Email Address"
           InputLeftElement={
             <Icon
@@ -147,6 +147,7 @@ export const Login = props => {
           }
         />
         <Input
+          rounded={'lg'}
           placeholder="Password"
           type={show ? 'text' : 'password'}
           InputRightElement={
@@ -162,7 +163,7 @@ export const Login = props => {
             setState({...state, password: TextInputValue})
           }
         />
-        <Button py={4} onPress={login} size="sm">
+        <Button rounded={'lg'} py={4} onPress={login} size="sm">
           Login
         </Button>
         {/* <Button

@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Icon,
-  Input,
-  Text,
-  VStack,
-} from 'native-base';
+import {Box, Button, Center, Input, Text, VStack} from 'native-base';
 import React from 'react';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {Colors} from '../assets/Colors';
@@ -19,12 +10,10 @@ import {
   check_available_timing,
   create_booking,
 } from '../config/Constants';
+import Loader from '../components/Loader';
 import {
   RNPaymentSDKLibrary,
   PaymentSDKConfiguration,
-  PaymentSDKBillingDetails,
-  PaymentSDKTheme,
-  PaymentSDKConstants,
 } from '@paytabs/react-native-paytabs';
 
 const createAppointment = props => {
@@ -118,46 +107,45 @@ const createAppointment = props => {
     props.navigation.navigate('My Orders');
   };
 
-  let billingDetails = new PaymentSDKBillingDetails();
-  billingDetails.name = global.first_name;
-  billingDetails.email = global.email;
-  billingDetails.phone = global.phone_number;
-  billingDetails.addressLine = global.address;
-  billingDetails.city = 'Dubai';
-  billingDetails.state = 'Dubai';
-  billingDetails.countryCode = 'sar'; // ISO alpha 2
-  billingDetails.zip = '1234';
+  const onPay = () => {
+    var billingDetails = {
+      name: 'John Smith',
+      email: 'email@domain.com',
+      phone: '+97311111111',
+      addressLine: 'Flat 1,Building 123, Road 2345',
+      city: 'Dubai',
+      state: 'Dubai',
+      countryCode: 'AE',
+      zip: '1234',
+    };
 
-  let configuration = new PaymentSDKConfiguration();
-  configuration.profileID = '*your profile id*';
-  configuration.serverKey = '*server key*';
-  configuration.clientKey = '*client key*';
-  configuration.cartID = '545454';
-  configuration.currency = 'AED';
-  configuration.cartDescription = 'Flowers';
-  configuration.merchantCountryCode = 'ae';
-  configuration.merchantName = 'Flowers Store';
-  configuration.amount = 20;
-  configuration.screenTitle = 'Pay with Card';
-  configuration.billingDetails = billingDetails;
-  configuration.forceShippingInfo = false;
-  configuration.showBillingInfo = true;
+    let configuration = new PaymentSDKConfiguration();
+    configuration.profileID = 89479;
+    configuration.serverKey = 'SJJN2GDLNH-JDB6RZRHBR-JDDZWKWZDB';
+    configuration.clientKey = 'CDKMQP-NQ6P6D-2GR9RH-2TTRV7';
+    configuration.cartID = '44444';
+    configuration.currency = 'MAD';
+    configuration.cartDescription = 'Flowers';
+    configuration.merchantCountryCode = 'MA';
+    configuration.merchantName = 'Flowers Store';
+    configuration.amount = 20;
+    configuration.screenTitle = 'Pay with Card';
+    configuration.billingDetails = billingDetails;
+    configuration.forceShippingInfo = false;
+    configuration.showBillingInfo = true;
 
-  const onPay = async () => {
     RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then(
       result => {
         if (result['PaymentDetails'] != null) {
-          // Handle transaction details
           let paymentDetails = result['PaymentDetails'];
+          createBooking();
           console.log(paymentDetails);
         } else if (result['Event'] == 'CancelPayment') {
-          // Handle events
           console.log('Cancel Payment Event');
         }
       },
       function (error) {
-        // Handle error
-        console.log(error);
+        alert(error);
       },
     );
   };
@@ -201,94 +189,100 @@ const createAppointment = props => {
   };
 
   return (
-    <VStack space={5} px={5} py={35}>
-      <Box pb={5}>
-        <Text fontSize={20} color={Colors.teal}>
-          Create Appointment
-        </Text>
-      </Box>
-      <Box
-        rounded="xl"
-        flexDirection={'column'}
-        justifyContent={'space-evenly'}
-        shadow={3}
-        style={styles.appintCard}>
-        <Text color={Colors.teal}>Title</Text>
-        <Input
-          rounded="xl"
-          width={'full'}
-          placeholder="I have viral fever last two days..."
-          onChangeText={TextInputValue =>
-            setState({...state, title: TextInputValue})
-          }
-        />
-      </Box>
-      <Box
-        rounded="xl"
-        flexDirection={'column'}
-        justifyContent={'space-evenly'}
-        shadow={3}
-        style={styles.appintCard}>
-        <Text fontWeight={'bold'} color={Colors.teal}>
-          Description
-        </Text>
-        <Input
-          width={'full'}
-          rounded="xl"
-          placeholder="Write short description..."
-          onChangeText={TextInputValue =>
-            setState({...state, description: TextInputValue})
-          }
-        />
-      </Box>
-      <Box
-        rounded="xl"
-        flexDirection={'row'}
-        justifyContent={'space-evenly'}
-        shadow={3}
-        style={styles.appintCard}>
-        <Button
-          rounded="xl"
-          colorScheme={'secondary'}
-          py={3}
-          px={5}
-          onPress={showDeliveryDatePicker}>
-          <Center>
-            {/* <EvilIcons
+    <>
+      {state.isLoding ? (
+        <Loader />
+      ) : (
+        <VStack space={5} px={5} py={35}>
+          <Box pb={5}>
+            <Text fontSize={20} color={Colors.teal}>
+              Create Appointment
+            </Text>
+          </Box>
+          <Box
+            rounded="xl"
+            flexDirection={'column'}
+            justifyContent={'space-evenly'}
+            shadow={3}
+            style={styles.appintCard}>
+            <Text color={Colors.teal}>Title</Text>
+            <Input
+              rounded="xl"
+              width={'full'}
+              placeholder="I have viral fever last two days..."
+              onChangeText={TextInputValue =>
+                setState({...state, title: TextInputValue})
+              }
+            />
+          </Box>
+          <Box
+            rounded="xl"
+            flexDirection={'column'}
+            justifyContent={'space-evenly'}
+            shadow={3}
+            style={styles.appintCard}>
+            <Text fontWeight={'bold'} color={Colors.teal}>
+              Description
+            </Text>
+            <Input
+              width={'full'}
+              rounded="xl"
+              placeholder="Write short description..."
+              onChangeText={TextInputValue =>
+                setState({...state, description: TextInputValue})
+              }
+            />
+          </Box>
+          <Box
+            rounded="xl"
+            flexDirection={'row'}
+            justifyContent={'space-evenly'}
+            shadow={3}
+            style={styles.appintCard}>
+            <Button
+              rounded="xl"
+              colorScheme={'secondary'}
+              py={3}
+              px={5}
+              onPress={showDeliveryDatePicker}>
+              <Center>
+                {/* <EvilIcons
                      style={{ color: Colors.white, paddingBottom: 0 }}
                      name='calendar'
                      size={28}
                      color='black'
                   /> */}
-            <FontAwesome
-              style={{color: Colors.white, paddingBottom: 0}}
-              name="calendar-o"
-              size={28}
+                <FontAwesome
+                  style={{color: Colors.white, paddingBottom: 0}}
+                  name="calendar-o"
+                  size={28}
+                />
+              </Center>
+            </Button>
+            <Text color={'gray.500'}>
+              {state.start_time ? state.start_time : 'Pick date please'}
+            </Text>
+            <DateTimePicker
+              isVisible={state.deliveryDatePickerVisible}
+              onConfirm={handleDeliveryDatePicked}
+              onCancel={hideDeliveryDatePicker}
+              minimumDate={new Date()}
+              mode="datetime"
             />
-          </Center>
-        </Button>
-        <Text color={'gray.500'}>
-          {state.start_time ? state.start_time : 'Pick date please'}
-        </Text>
-        <DateTimePicker
-          isVisible={state.deliveryDatePickerVisible}
-          onConfirm={handleDeliveryDatePicked}
-          onCancel={hideDeliveryDatePicker}
-          minimumDate={new Date()}
-          mode="datetime"
-        />
-      </Box>
-      <Button
-        onPress={createBooking}
-        mt={7}
-        rounded="xl"
-        px={10}
-        py={4}
-        size={'lg'}
-        shadow={2}>
-        Confirm
-      </Button>
-    </VStack>
+          </Box>
+          <Button
+            onPress={onPay}
+            mt={7}
+            rounded="xl"
+            px={10}
+            py={4}
+            size={'lg'}
+            shadow={2}>
+            Confirm
+          </Button>
+        </VStack>
+      )}
+    </>
   );
 };
 

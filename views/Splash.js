@@ -13,6 +13,7 @@ const Splash = props => {
     if (!fcmToken) {
       let fcmToken = await messaging().getToken();
       if (fcmToken) {
+        
         try {
           AsyncStorageLib.setItem('fcmToken', fcmToken);
           global.fcm_token = fcmToken;

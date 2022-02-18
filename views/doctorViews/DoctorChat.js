@@ -82,7 +82,6 @@ export default DoctorChat = props => {
       })
   }
 
-  console.log(global.first_name)
   return (
     <View style={{flex: 1}}>
       <GiftedChat

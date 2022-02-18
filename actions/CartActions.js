@@ -1,4 +1,4 @@
-import * as ActionTypes from './ActionTypes';
+import * as ActionTypes from './ActionTypes'
 
 export const subTotal = (data) => ({
     type: ActionTypes.SUB_TOTAL,

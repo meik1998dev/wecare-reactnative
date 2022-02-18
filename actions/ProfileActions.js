@@ -1,4 +1,4 @@
-import * as ActionTypes from './ActionTypes';
+import * as ActionTypes from './ActionTypes'
 
 export const editServiceActionPending = () => ({
     type: ActionTypes.EDIT_PROFILE_PENDING

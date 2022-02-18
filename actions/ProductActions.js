@@ -1,4 +1,4 @@
-import * as ActionTypes from './ActionTypes';
+import * as ActionTypes from './ActionTypes'
 
 export const serviceActionPending = () => ({
     type: ActionTypes.PRODUCT_LIST_PENDING

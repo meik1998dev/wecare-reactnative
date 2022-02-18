@@ -1,4 +1,4 @@
-import * as ActionTypes from './ActionTypes';
+import * as ActionTypes from './ActionTypes'
 
 export const serviceActionPending = () => ({
     type: ActionTypes.PRIVACY_SERVICE_PENDING

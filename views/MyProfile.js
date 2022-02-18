@@ -19,8 +19,9 @@ import {
 } from '../config/Constants'
 import {Colors} from '../assets/Colors'
 import Loader from '../components/Loader'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
 
-const MyProfile = props => {
+const MyProfile = () => {
   const [state, setState] = React.useState({
     profile_picture: '',
     first_name: '',
@@ -42,10 +43,11 @@ const MyProfile = props => {
 
   const getProfile = async () => {
     setLoading(true)
+    const user_id = await AsyncStorageLib.getItem('user_id')
     await axios({
       method: 'post',
       url: api_url + get_profile,
-      data: {customer_id: global.id},
+      data: {customer_id: user_id},
     })
       .then(response => {
         console.log(response.data)
@@ -84,9 +86,9 @@ const MyProfile = props => {
       })
   }
 
-  const select_blood_group = value => {
-    setState({...state, blood_group: value})
-  }
+  // const select_blood_group = value => {
+  //   setState({...state, blood_group: value})
+  // }
 
   const checkValidate = () => {
     if (
@@ -105,11 +107,13 @@ const MyProfile = props => {
     Keyboard.dismiss()
     await checkValidate()
     if (state.validation) {
+      const user_id = await AsyncStorageLib.getItem('user_id')
+
       await axios({
         method: 'post',
         url: api_url + profile_update,
         data: {
-          id: global.id,
+          id: user_id,
           first_name: state.first_name,
           mid_name: state.mid_name,
           last_name: state.last_name,
@@ -123,27 +127,27 @@ const MyProfile = props => {
         .then(async response => {
           console.log(response.data)
           alert('Successfully updated')
-          await saveData()
+          // await saveData()
         })
         .catch(error => {
           alert(error)
         })
     }
   }
-  console.log(state)
-  const saveData = async () => {
-    try {
-      await AsyncStorage.setItem('user_id', props.data.id.toString())
-      await AsyncStorage.setItem(
-        'first_name',
-        props.data.first_name.toString(),
-      )
-      global.id = await props.data.id
-      global.first_name = await props.data.first_name
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  
+  // const saveData = async () => {
+  //   try {
+  //     await AsyncStorage.setItem('user_id', props.data.id.toString())
+  //     await AsyncStorage.setItem(
+  //       'first_name',
+  //       props.data.first_name.toString(),
+  //     )
+  //     global.id = await props.data.id
+  //     global.first_name = await props.data.first_name
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
   return (
     <>
@@ -268,24 +272,8 @@ const MyProfile = props => {
                   </Select>
                 )}
                 <Text pl={2} mb={-3} color={Colors.purpel}>
-                  Gender{' '}
+                  Gender
                 </Text>
-
-                {/* <Select
-              rounded={'lg'}
-              fontSize={15}
-              onValueChange={itemValue =>
-                setState({...state, gender: itemValue})
-              }
-              minWidth="200"
-              _selectedItem={{
-                bg: 'teal.600',
-                endIcon: <CheckIcon size="5" />,
-              }}
-              selectedValue={state.gender}>
-              <Select.Item key={'Male'} label="Male" value="male" />
-              <Select.Item key={'Female'} label="Female" value="female" />
-            </Select> */}
                 <Text pl={2} mb={-3} color={Colors.purpel}>
                   Password
                 </Text>

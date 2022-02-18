@@ -53,34 +53,6 @@ const DoctorHome = props => {
       })
   }
 
-  const check_settings = async data => {
-    try {
-      await AsyncStorageLib.setItem(
-        'profile_status',
-        data.result.profile_status.toString(),
-      )
-      await AsyncStorageLib.setItem(
-        'document_update_status',
-        data.result.document_update_status.toString(),
-      )
-      global.profile_status = await data.result.profile_status
-      global.document_update_status = await data.result.document_update_status
-    } catch (e) {
-      alert('Sorry something went wrong')
-    }
-    if (
-      data.result.profile_status == 0 ||
-      data.result.document_update_status == 0
-    ) {
-      props.navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'Settings'}],
-        }),
-      )
-    }
-  }
-
   const acceptBookingRequest = async id => {
     setState({...state, isLoading: true})
     await axios({

@@ -36,6 +36,7 @@ import DoctorsList from './views/DoctorsList.js'
 import createAppointment from './views/createAppointment.js'
 import {PhoneVerification} from './views/PhoneVerification.js'
 import { DoctorPhoneVerification } from './views/doctorViews/PhoneVerification.js'
+import { Auth } from './views/Auth.js'
 
 const Drawer = createDrawerNavigator()
 const Stack = createNativeStackNavigator()
@@ -90,6 +91,7 @@ export default function App() {
       <NativeBaseProvider theme={theme}>
         <NavigationContainer theme={MyTheme}>
           <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Auth" component={Auth} />
             <Stack.Screen
               options={{
                 title: 'We care',

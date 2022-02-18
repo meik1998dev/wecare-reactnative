@@ -111,7 +111,6 @@ export function PhoneVerification(props) {
       global.first_name = await data.result.first_name
       global.phone_number = await data.result.phone_number
       global.email = await data.result.email
-      console.log(global.email)
       Alert.alert('Success', 'You are registered successfully', [
         {
           text: 'OK',

@@ -11,6 +11,7 @@ import {
 import Moment from 'moment'
 import {Colors} from '../assets/Colors'
 import {TouchableOpacity, Image} from 'react-native'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
 
 const MyOrders = props => {
   const [state, setState] = React.useState({
@@ -29,10 +30,11 @@ const MyOrders = props => {
   const getMyOrders = async () => {
     setState({...state, isLoding: true})
     props.serviceActionPending()
+    const user_id = await AsyncStorageLib.getItem('user_id')
     await axios({
       method: 'post',
       url: api_url + my_orders,
-      data: {customer_id: global.id},
+      data: {customer_id: user_id},
     })
       .then(async response => {
         console.log(response.data)

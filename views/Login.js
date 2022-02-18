@@ -108,15 +108,14 @@ export const Login = props => {
       console.log('err')
     }
   }
-  console.log(global.id)
 
   const register = () => {
     props.navigation.navigate('Register')
   }
 
-  const forgot = () => {
-    props.navigation.navigate('Forgot')
-  }
+  // const forgot = () => {
+  //   props.navigation.navigate('Forgot')
+  // }
 
   const showToast = (msg, status) => {
     toast.show({

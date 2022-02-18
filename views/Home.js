@@ -16,7 +16,7 @@ const Home = (props) => {
     category: [],
     doctors: [],
   })
-  console.log(global.first_name)
+  
   React.useEffect(() => {
     fetchHomeData()
     getToken()

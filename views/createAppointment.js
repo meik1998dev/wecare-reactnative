@@ -15,6 +15,7 @@ import {
   RNPaymentSDKLibrary,
   PaymentSDKConfiguration,
 } from '@paytabs/react-native-paytabs'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
 
 const createAppointment = props => {
   const [state, setState] = React.useState({
@@ -32,12 +33,12 @@ const createAppointment = props => {
 
   const createBooking = async () => {
     setState({...state, isLoding: true})
-    console.log(state)
+    const user_id = await AsyncStorageLib.getItem('user_id')
     await axios({
       method: 'post',
       url: api_url + create_booking,
       data: {
-        patient_id: global.id,
+        patient_id: user_id,
         doctor_id: state.doctor_id,
         booking_type: props.route.params.type,
         start_time: state.start_time,
@@ -107,11 +108,15 @@ const createAppointment = props => {
     props.navigation.navigate('My Orders')
   }
 
-  const onPay = () => {
+  const onPay = async() => {
+    const first_name = await AsyncStorageLib.getItem('first_name')
+    const email = await AsyncStorageLib.getItem('first_name')
+    const phone_number = await AsyncStorageLib.getItem('phone_number')
+
     var billingDetails = {
-      name: 'John Smith',
-      email: 'email@domain.com',
-      phone: '+97311111111',
+      name: first_name,
+      email: email,
+      phone: phone_number,
       addressLine: 'Flat 1,Building 123, Road 2345',
       city: 'Dubai',
       state: 'Dubai',

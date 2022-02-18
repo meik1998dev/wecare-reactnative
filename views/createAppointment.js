@@ -265,7 +265,7 @@ const createAppointment = props => {
             />
           </Box>
           <Button
-            onPress={onPay}
+            onPress={props.route.params.type===2 ? createBooking : onPay}
             mt={7}
             rounded="xl"
             px={10}

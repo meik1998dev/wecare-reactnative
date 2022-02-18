@@ -1,32 +1,32 @@
-import {Button, Center, Text} from 'native-base';
-import React from 'react';
-import messaging from '@react-native-firebase/messaging';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
+import {Button, Center, Text} from 'native-base'
+import React from 'react'
+import messaging from '@react-native-firebase/messaging'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
 
 const Splash = props => {
   React.useEffect(() => {
-    getToken();
-  }, []);
+    getToken()
+  }, [])
 
   const getToken = async () => {
-    let fcmToken = await AsyncStorageLib.getItem('fcmToken');
+    let fcmToken = await AsyncStorageLib.getItem('fcmToken')
     if (!fcmToken) {
-      let fcmToken = await messaging().getToken();
+      let fcmToken = await messaging().getToken()
       if (fcmToken) {
         
         try {
-          AsyncStorageLib.setItem('fcmToken', fcmToken);
-          global.fcm_token = fcmToken;
+          AsyncStorageLib.setItem('fcmToken', fcmToken)
+          global.fcm_token = fcmToken
         } catch (e) {
-          console.log(e);
+          console.log(e)
         }
       }
     } else {
-      global.fcm_token = fcmToken;
+      global.fcm_token = fcmToken
     }
-  };
-  console.log(global.first_name);
-  console.log(global.fcm_token);
+  }
+  console.log(global.first_name)
+  console.log(global.fcm_token)
 
   return (
     <Center flex={1} px="3">
@@ -46,7 +46,7 @@ const Splash = props => {
         Patiant
       </Button>
     </Center>
-  );
-};
+  )
+}
 
-export default Splash;
+export default Splash

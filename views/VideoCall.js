@@ -1,29 +1,29 @@
-import axios from 'axios';
-import {Button, Center, Text, View} from 'native-base';
-import React, {Component, useRef} from 'react';
-import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import axios from 'axios'
+import {Button, Center, Text, View} from 'native-base'
+import React, { useRef} from 'react'
+import {StyleSheet, TouchableOpacity} from 'react-native'
 import {
   TwilioVideoLocalView,
   TwilioVideoParticipantView,
   TwilioVideo,
-} from 'react-native-twilio-video-webrtc';
-import {api_url} from '../config/Constants';
+} from 'react-native-twilio-video-webrtc'
+import {api_url} from '../config/Constants'
 
 const DoctorVideoCall = props => {
-  const [isAudioEnabled, setIsAudioEnabled] = React.useState(true);
-  const [isVideoEnabled, setIsVideoEnabled] = React.useState(true);
-  const [status, setStatus] = React.useState('disconnected');
-  const [participants, setParticipants] = React.useState(new Map());
-  const [videoTracks, setVideoTracks] = React.useState(new Map());
-  const [token, setToken] = React.useState('');
-  const twilioRef = useRef(null);
-  console.log(status);
+  const [isAudioEnabled, setIsAudioEnabled] = React.useState(true)
+  // const [isVideoEnabled, setIsVideoEnabled] = React.useState(true)
+  const [status, setStatus] = React.useState('disconnected')
+  // const [participants, setParticipants] = React.useState(new Map())
+  const [videoTracks, setVideoTracks] = React.useState(new Map())
+  const [token, setToken] = React.useState('')
+  const twilioRef = useRef(null)
+  console.log(status)
 
   React.useEffect(() => {
-    getAccessTokenFromServer();
-  }, []);
-  console.log(props.route.params.booking_id);
-  console.log(props.route.params.booking_id);
+    getAccessTokenFromServer()
+  }, [])
+  console.log(props.route.params.booking_id)
+  console.log(props.route.params.booking_id)
   const getAccessTokenFromServer = async () => {
     await axios({
       method: 'get',
@@ -34,57 +34,57 @@ const DoctorVideoCall = props => {
         props.route.params.booking_id,
     })
       .then(async response => {
-        console.log(response.data);
+        console.log(response.data)
         // this.setState({isLoading: false});
-        setToken(response.data.result);
+        setToken(response.data.result)
       })
       .catch(error => {
-        console.log(error);
+        console.log(error)
         // this.setState({isLoading: false});
-      });
-  };
+      })
+  }
 
   const _onConnectButtonPress = () => {
     twilioRef.current.connect({
       accessToken: token,
-    });
-    setStatus('connecting');
-  };
+    })
+    setStatus('connecting')
+  }
 
   const _onEndButtonPress = () => {
-    twilioRef.current.disconnect();
-  };
+    twilioRef.current.disconnect()
+  }
 
   const _onMuteButtonPress = () => {
     twilioRef.current
       .setLocalAudioEnabled(!isAudioEnabled)
-      .then(isEnabled => setIsAudioEnabled(isEnabled));
-  };
+      .then(isEnabled => setIsAudioEnabled(isEnabled))
+  }
 
   const _onFlipButtonPress = () => {
-    twilioRef.current.flipCamera();
-  };
+    twilioRef.current.flipCamera()
+  }
 
   const _onRoomDidConnect = ({roomName, error}) => {
-    console.log('onRoomDidConnect: ', roomName);
+    console.log('onRoomDidConnect: ', roomName)
 
-    setStatus('connected');
-  };
+    setStatus('connected')
+  }
 
   const _onRoomDidDisconnect = ({roomName, error}) => {
-    console.log('[Disconnect]ERROR: ', error);
+    console.log('[Disconnect]ERROR: ', error)
 
-    setStatus('disconnected');
-  };
+    setStatus('disconnected')
+  }
 
   const _onRoomDidFailToConnect = error => {
-    console.log('[FailToConnect]ERROR: ', error);
+    console.log('[FailToConnect]ERROR: ', error)
 
-    setStatus('disconnected');
-  };
+    setStatus('disconnected')
+  }
 
   const _onParticipantAddedVideoTrack = ({participant, track}) => {
-    console.log('onParticipantAddedVideoTrack: ', participant, track);
+    console.log('onParticipantAddedVideoTrack: ', participant, track)
 
     setVideoTracks(
       new Map([
@@ -94,17 +94,17 @@ const DoctorVideoCall = props => {
           {participantSid: participant.sid, videoTrackSid: track.trackSid},
         ],
       ]),
-    );
-  };
+    )
+  }
 
   const _onParticipantRemovedVideoTrack = ({participant, track}) => {
-    console.log('onParticipantRemovedVideoTrack: ', participant, track);
+    console.log('onParticipantRemovedVideoTrack: ', participant, track)
 
-    const videoTracksLocal = videoTracks;
-    videoTracksLocal.delete(track.trackSid);
+    const videoTracksLocal = videoTracks
+    videoTracksLocal.delete(track.trackSid)
 
-    setVideoTracks(videoTracksLocal);
-  };
+    setVideoTracks(videoTracksLocal)
+  }
 
   return (
     <View style={styles.container}>
@@ -129,7 +129,7 @@ const DoctorVideoCall = props => {
                     key={trackSid}
                     trackIdentifier={trackIdentifier}
                   />
-                );
+                )
               })}
             </View>
           )}
@@ -168,8 +168,8 @@ const DoctorVideoCall = props => {
         onParticipantRemovedVideoTrack={_onParticipantRemovedVideoTrack}
       />
     </View>
-  );
-};
+  )
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -281,5 +281,5 @@ const styles = StyleSheet.create({
     width: '95%',
     borderBottomWidth: 1,
   },
-});
-export default DoctorVideoCall;
+})
+export default DoctorVideoCall

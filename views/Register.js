@@ -1,8 +1,6 @@
-import React from 'react';
-import {View, StyleSheet, ScrollView, Keyboard, Alert} from 'react-native';
-import {CommonActions} from '@react-navigation/native';
+import React from 'react'
+import { StyleSheet, ScrollView, Keyboard} from 'react-native'
 import {
-  Icon,
   Button,
   useToast,
   Text,
@@ -10,18 +8,17 @@ import {
   Select,
   CheckIcon,
   Stack,
-  Container,
   Center,
-} from 'native-base';
-import {api_url, get_blood_list, register_url} from '../config/Constants';
-import axios from 'axios';
-import {connect} from 'react-redux';
+} from 'native-base'
+import {api_url, get_blood_list} from '../config/Constants'
+import axios from 'axios'
+import {connect} from 'react-redux'
 import {
   serviceActionPending,
   serviceActionError,
   serviceActionSuccess,
-} from '../actions/RegisterActions';
-import {Colors} from '../assets/Colors';
+} from '../actions/RegisterActions'
+import {Colors} from '../assets/Colors'
 
 export const Register = props => {
   const [state, setState] = React.useState({
@@ -36,38 +33,37 @@ export const Register = props => {
     validation: true,
     gender: '',
     address: '',
-    blood_group: '',
     fcm_token: global.fcm_token,
-  });
+  })
 
-  const [bloodList, setBloodList] = React.useState([]);
+  const [bloodList, setBloodList] = React.useState([])
 
-  const toast = useToast();
+  const toast = useToast()
 
-  const [showDatePicker, setShowDatePicker] = React.useState(false);
+  // const [showDatePicker, setShowDatePicker] = React.useState(false)
 
   const showToast = (msg, status) => {
     toast.show({
       title: msg,
       status: status,
-    });
-  };
+    })
+  }
 
   React.useEffect(() => {
-    fetchBloodList();
-  }, []);
+    fetchBloodList()
+  }, [])
 
   const login = () => {
-    props.navigation.navigate('Login');
-  };
+    props.navigation.navigate('Login')
+  }
 
   const navigtateToPhoneVerify = () => {
-    props.navigation.navigate('Phone Verify' , {state: state});
-  };
+    props.navigation.navigate('Phone Verify' , {state: state})
+  }
 
   const register = async () => {
-    Keyboard.dismiss();
-    checkValidate();
+    Keyboard.dismiss()
+    checkValidate()
     if (state.validation) {
       await axios({
         method: 'post',
@@ -86,25 +82,25 @@ export const Register = props => {
         },
       })
         .then(async response => {
-          if (response.data.status !== "0") {
-            navigtateToPhoneVerify();
+          if (response.data.status !== '0') {
+            navigtateToPhoneVerify()
           } else {
-            showToast(response.data.message, 'error');
+            showToast(response.data.message, 'error')
           }
         })
         .catch(error => {
-          console.log(error);
-        });
+          console.log(error)
+        })
     }
-  };
+  }
 
   const fetchBloodList = async data => {
     const res = await axios({
       method: 'get',
       url: api_url + get_blood_list,
-    });
-    setBloodList(res.data.result);
-  };
+    })
+    setBloodList(res.data.result)
+  }
 
   const checkValidate = () => {
     if (
@@ -115,14 +111,14 @@ export const Register = props => {
       state.first_name == '' ||
       state.last_name == ''
     ) {
-      state.validation = false;
-      showToast('Please fill all the fields.', 'error');
-      return true;
+      state.validation = false
+      showToast('Please fill all the fields.', 'error')
+      return true
     } else {
-      state.validation = true;
-      return true;
+      state.validation = true
+      return true
     }
-  };
+  }
 
   return (
     <ScrollView>
@@ -266,8 +262,8 @@ export const Register = props => {
         </Stack>
       </Center>
     </ScrollView>
-  );
-};
+  )
+}
 
 function mapStateToProps(state) {
   return {
@@ -276,15 +272,15 @@ function mapStateToProps(state) {
     data: state.register.data,
     message: state.register.message,
     status: state.register.status,
-  };
+  }
 }
 
 const mapDispatchToProps = dispatch => ({
   serviceActionPending: () => dispatch(serviceActionPending()),
   serviceActionError: error => dispatch(serviceActionError(error)),
   serviceActionSuccess: data => dispatch(serviceActionSuccess(data)),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})

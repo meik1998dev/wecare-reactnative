@@ -1,17 +1,16 @@
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import {CommonActions} from '@react-navigation/native';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
+import React from 'react'
+import {View, Text} from 'react-native'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
 
 const Logout = props => {
   React.useEffect(() => {
-    clear();
-    resetMenu();
-  }, []);
+    clear()
+    resetMenu()
+  }, [])
 
-  const clear = async () => await AsyncStorageLib.clear();
+  const clear = async () => await AsyncStorageLib.clear()
 
-  const resetMenu = () => props.navigation.navigate('Splash');
+  const resetMenu = () => props.navigation.navigate('Splash')
 
   return (
     <View>
@@ -19,7 +18,7 @@ const Logout = props => {
         <Text>Please wait...</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default Logout;
+export default Logout

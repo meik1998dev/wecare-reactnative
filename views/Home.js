@@ -1,52 +1,52 @@
-import React from 'react';
-import {View, ScrollView, Image} from 'react-native';
-import Carousel from 'react-native-snap-carousel';
-import {Box, VStack, Text, Button} from 'native-base';
-import messaging from '@react-native-firebase/messaging';
-import {home_details, api_url, img_url} from '../config/Constants';
-import axios from 'axios';
-import Loader from '../components/Loader';
-import {Colors} from '../assets/Colors';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
+import React from 'react'
+import { View, ScrollView, Image } from 'react-native'
+import Carousel from 'react-native-snap-carousel'
+import { Box, VStack, Text, Button } from 'native-base'
+import messaging from '@react-native-firebase/messaging'
+import { home_details, api_url, img_url } from '../config/Constants'
+import axios from 'axios'
+import Loader from '../components/Loader'
+import { Colors } from '../assets/Colors'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
 
-const Home = props => {
+const Home = (props) => {
   const [state, setState] = React.useState({
     isLoding: true,
     banners: [],
     category: [],
     doctors: [],
-  });
-  console.log(global.first_name);
+  })
+  console.log(global.first_name)
   React.useEffect(() => {
-    fetchHomeData();
-    getToken();
-  }, []);
+    fetchHomeData()
+    getToken()
+  }, [])
 
   const getToken = async () => {
     //get the messeging token
 
-    let fcmToken = await AsyncStorageLib.getItem('fcmToken');
+    let fcmToken = await AsyncStorageLib.getItem('fcmToken')
     if (!fcmToken) {
-      let fcmToken = await messaging().getToken();
+      let fcmToken = await messaging().getToken()
       if (fcmToken) {
         try {
-          AsyncStorageLib.setItem('fcmToken', fcmToken);
-          global.fcm_token = fcmToken;
+          AsyncStorageLib.setItem('fcmToken', fcmToken)
+          global.fcm_token = fcmToken
         } catch (e) {
-          console.log(e);
+          console.log(e)
         }
       }
     } else {
-      global.fcm_token = fcmToken;
+      global.fcm_token = fcmToken
     }
-  };
+  }
 
   const fetchHomeData = async () => {
     try {
       const res = await axios({
         method: 'post',
         url: api_url + home_details,
-      });
+      })
       if (res.data.message === 'Success') {
         setState({
           ...state,
@@ -54,14 +54,14 @@ const Home = props => {
           banners: res.data.result.banners,
           category: res.data.result.categories,
           doctors: res.data.result.doctors,
-        });
+        })
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
-  const _renderBannerItem = ({item, index}) => {
+  const _renderBannerItem = ({ item, index }) => {
     return (
       <Box
         style={{
@@ -71,15 +71,12 @@ const Home = props => {
           height: 120,
           marginTop: 10,
         }}>
-        <Image
-          style={{width: '100%', height: '100%'}}
-          source={{uri: img_url + item.url}}
-        />
+        <Image style={{ width: '100%', height: '100%' }} source={{ uri: img_url + item.url }} />
       </Box>
-    );
-  };
+    )
+  }
 
-  const _renderCategoriesItem = ({item, index}) => {
+  const _renderCategoriesItem = ({ item, index }) => {
     return (
       <Box>
         <Box
@@ -94,28 +91,25 @@ const Home = props => {
             marginVertical: 3,
           }}>
           <Image
-            style={{width: 132, height: 132, borderRadius: 100}}
+            style={{ width: 132, height: 132, borderRadius: 100 }}
             alt="cat"
-            source={{uri: img_url + item.category_image}}></Image>
+            source={{ uri: img_url + item.category_image }}></Image>
         </Box>
         <Text fontWeight="bold" mt={5} alignSelf="center">
           {item.category_name}
         </Text>
       </Box>
-    );
-  };
+    )
+  }
 
-  console.log(state);
+  console.log(state)
 
   return (
     <>
       {!state.isLoding ? (
         <ScrollView>
-          <VStack
-            space={8}
-            alignItems={'center'}
-            style={{flex: 1, paddingTop: 20}}>
-            <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+          <VStack space={8} alignItems={'center'} style={{ flex: 1, paddingTop: 20 }}>
+            <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
               <Carousel
                 data={state.banners}
                 renderItem={_renderBannerItem}
@@ -131,11 +125,7 @@ const Home = props => {
               />
             </View>
             <Box w={'full'}>
-              <Text
-                color={Colors.teal}
-                fontWeight={'bold'}
-                pl={10}
-                fontSize={'lg'}>
+              <Text color={Colors.teal} fontWeight={'bold'} pl={10} fontSize={'lg'}>
                 Categories
               </Text>
               <Box
@@ -158,11 +148,7 @@ const Home = props => {
               </Box>
             </Box>
             <Box w={'full'}>
-              <Text
-                color={Colors.teal}
-                fontWeight={'bold'}
-                pl={10}
-                fontSize={'lg'}>
+              <Text color={Colors.teal} fontWeight={'bold'} pl={10} fontSize={'lg'}>
                 Doctors
               </Text>
               <Box
@@ -172,7 +158,7 @@ const Home = props => {
                   flexDirection: 'row',
                 }}>
                 <ScrollView horizontal={true}>
-                  {state.doctors.map(item => {
+                  {state.doctors.map((item) => {
                     return (
                       <Box
                         key={item.id}
@@ -194,25 +180,19 @@ const Home = props => {
                             borderTopRightRadius: 25,
                             borderTopLeftRadius: 25,
                           }}
-                          source={{uri: img_url + item.profile_image}}
+                          source={{ uri: img_url + item.profile_image }}
                         />
                         <Text>{item.doctor_name}</Text>
                       </Box>
-                    );
+                    )
                   })}
                 </ScrollView>
               </Box>
             </Box>
 
-            <Box
-              mb={3}
-              flexDirection={'row'}
-              justifyContent={'space-around'}
-              w={'full'}>
+            <Box mb={3} flexDirection={'row'} justifyContent={'space-around'} w={'full'}>
               <Button
-                onPress={() =>
-                  props.navigation.navigate('DoctorsList', {type: 1})
-                }
+                onPress={() => props.navigation.navigate('DoctorsList', { type: 1 })}
                 shadow="2"
                 py={4}
                 rounded="xl"
@@ -220,9 +200,7 @@ const Home = props => {
                 Book Online
               </Button>
               <Button
-                onPress={() =>
-                  props.navigation.navigate('DoctorsList', {type: 2})
-                }
+                onPress={() => props.navigation.navigate('DoctorsList', { type: 2 })}
                 shadow="2"
                 colorScheme={'secondary'}
                 py={4}
@@ -237,7 +215,7 @@ const Home = props => {
         <Loader />
       )}
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

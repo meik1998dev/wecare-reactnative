@@ -1,15 +1,15 @@
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import {Badge, Box, FlatList, ScrollView, Text, VStack} from 'native-base';
-import React from 'react';
-import {Alert, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import {Colors} from '../../assets/Colors';
-import {api_url, img_url} from '../../config/Constants';
-import Moment from 'moment';
-import {useToast} from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Loader from '../../components/Loader';
-import noDataSVG from '../../assets/img/delete.png';
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
+import axios from 'axios'
+import {Badge, Box, FlatList, ScrollView, Text, VStack} from 'native-base'
+import React from 'react'
+import {Alert, Image, StyleSheet, TouchableOpacity} from 'react-native'
+import {Colors} from '../../assets/Colors'
+import {api_url, img_url} from '../../config/Constants'
+import Moment from 'moment'
+import {useToast} from 'native-base'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Loader from '../../components/Loader'
+import noDataSVG from '../../assets/img/delete.png'
 
 const DoctorHome = props => {
   const [state, setState] = React.useState({
@@ -18,55 +18,55 @@ const DoctorHome = props => {
     data: [],
     bookings: [],
     api_status: 0,
-  });
+  })
 
-  const toast = useToast();
+  const toast = useToast()
 
   React.useEffect(() => {
-    getDetails();
+    getDetails()
     //  getProfile();
-  }, []);
+  }, [])
 
   const getDetails = async () => {
-    const id = await AsyncStorageLib.getItem('id');
-    console.log(id);
-    setState({...state, isLoading: true});
+    const id = await AsyncStorageLib.getItem('id')
+    console.log(id)
+    setState({...state, isLoading: true})
     await axios({
       method: 'post',
       url: api_url + 'doctor/dashboard',
       data: {id: id},
     })
       .then(async response => {
-        console.log(response.data);
+        console.log(response.data)
         setState({
           ...state,
           isLoading: false,
           data: response.data.result,
           api_status: 1,
           bookings: response.data.result.booking_requests,
-        });
+        })
       })
       .catch(error => {
-        console.log(error);
-        setState({...state, isLoading: false});
-        alert('Sorry, something went wrong');
-      });
-  };
+        console.log(error)
+        setState({...state, isLoading: false})
+        alert('Sorry, something went wrong')
+      })
+  }
 
   const check_settings = async data => {
     try {
       await AsyncStorageLib.setItem(
         'profile_status',
         data.result.profile_status.toString(),
-      );
+      )
       await AsyncStorageLib.setItem(
         'document_update_status',
         data.result.document_update_status.toString(),
-      );
-      global.profile_status = await data.result.profile_status;
-      global.document_update_status = await data.result.document_update_status;
+      )
+      global.profile_status = await data.result.profile_status
+      global.document_update_status = await data.result.document_update_status
     } catch (e) {
-      alert('Sorry something went wrong');
+      alert('Sorry something went wrong')
     }
     if (
       data.result.profile_status == 0 ||
@@ -77,32 +77,32 @@ const DoctorHome = props => {
           index: 0,
           routes: [{name: 'Settings'}],
         }),
-      );
+      )
     }
-  };
+  }
 
   const acceptBookingRequest = async id => {
-    setState({...state, isLoading: true});
+    setState({...state, isLoading: true})
     await axios({
       method: 'post',
       url: api_url + 'doctor/accept_booking',
       data: {booking_request_id: id, status: 2},
     })
       .then(async response => {
-        setState({...state, isLoading: false});
+        setState({...state, isLoading: false})
         toast.show({
           title: 'Book Accepted',
           status: 'success',
           description: 'Thanks you.',
-        });
-        getDetails();
+        })
+        getDetails()
       })
       .catch(error => {
-        setState({...state, isLoading: false});
-        console.log(error);
-        alert('Sorry, something went wrong');
-      });
-  };
+        setState({...state, isLoading: false})
+        console.log(error)
+        alert('Sorry, something went wrong')
+      })
+  }
 
   const popupActions = id => {
     Alert.alert('Choose Action', 'Accept an appointment', [
@@ -113,12 +113,12 @@ const DoctorHome = props => {
       {
         text: 'accept',
         onPress: () => {
-          acceptBookingRequest(id);
+          acceptBookingRequest(id)
         },
       },
-    ]);
-  };
-  console.log(state.data.booking_requests);
+    ])
+  }
+  console.log(state.data.booking_requests)
   return (
     <>
       {!state.isLoading ? (
@@ -214,8 +214,8 @@ const DoctorHome = props => {
         <Loader />
       )}
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   card: {
@@ -239,6 +239,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     alignSelf: 'center',
   },
-});
+})
 
-export default DoctorHome;
+export default DoctorHome

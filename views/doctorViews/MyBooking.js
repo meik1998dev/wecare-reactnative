@@ -1,18 +1,18 @@
-import axios from 'axios';
-import {Badge, Box, FlatList, Text, View, VStack, Pressable} from 'native-base';
-import React from 'react';
-import {Image, TouchableOpacity} from 'react-native';
-import {Colors} from '../../assets/Colors';
-import Moment from 'moment';
-import {api_url, img_url} from '../../config/Constants';
-import Loader from '../../components/Loader';
+import axios from 'axios'
+import {Badge, Box, FlatList, Text, View, VStack} from 'native-base'
+import React from 'react'
+import {Image, TouchableOpacity} from 'react-native'
+import {Colors} from '../../assets/Colors'
+import Moment from 'moment'
+import {api_url, img_url} from '../../config/Constants'
+import Loader from '../../components/Loader'
 
 const MyBooking = props => {
-  const [state, setState] = React.useState({});
+  const [state, setState] = React.useState({})
 
   React.useEffect(() => {
-    getMyBookings();
-  }, []);
+    getMyBookings()
+  }, [])
 
   const getMyBookings = async () => {
     await axios({
@@ -21,19 +21,19 @@ const MyBooking = props => {
       data: {doctor_id: global.id},
     })
       .then(async response => {
-        console.log(response.data.result);
+        console.log(response.data.result)
         setState({
           data: response.data.result,
           isLoding: false,
           api_status: 1,
-        });
+        })
       })
       .catch(error => {
-        console.log(error);
-        setState({...state, isLoding: false});
-      });
-  };
-  console.log(state.data);
+        console.log(error)
+        setState({...state, isLoding: false})
+      })
+  }
+  console.log(state.data)
   return (
     <>
       {state.data ? (
@@ -110,7 +110,7 @@ const MyBooking = props => {
         <Loader />
       )}
     </>
-  );
-};
+  )
+}
 
-export default MyBooking;
+export default MyBooking

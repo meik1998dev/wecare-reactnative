@@ -1,22 +1,17 @@
-import React from 'react';
-import {View, StyleSheet, ScrollView, Keyboard, Alert} from 'react-native';
-import {CommonActions} from '@react-navigation/native';
+import React from 'react'
+import {ScrollView, Keyboard} from 'react-native'
+import {CommonActions} from '@react-navigation/native'
 import {
-  Icon,
   Button,
   useToast,
   Text,
   Input,
-  Select,
-  CheckIcon,
   Stack,
-  Container,
   Center,
-} from 'native-base';
-import {api_url, get_blood_list, register_url} from '../../config/Constants';
-import axios from 'axios';
-import {Colors} from '../../assets/Colors';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
+} from 'native-base'
+import {api_url} from '../../config/Constants'
+import axios from 'axios'
+import {Colors} from '../../assets/Colors'
 
 const DoctorRegister = props => {
   const [state, setState] = React.useState({
@@ -30,20 +25,20 @@ const DoctorRegister = props => {
     isLoding: false,
     fcm_token: global.fcm_token,
     phone_number: '',
-  });
+  })
 
-  const toast = useToast();
+  const toast = useToast()
 
   const showToast = (msg, status) => {
     toast.show({
       title: msg,
       status: status,
-    });
-  };
+    })
+  }
 
   const login = () => {
-    props.navigation.navigate('Doctor Login');
-  };
+    props.navigation.navigate('Doctor Login')
+  }
 
   const home = () => {
     props.navigation.dispatch(
@@ -51,12 +46,12 @@ const DoctorRegister = props => {
         index: 0,
         routes: [{name: 'Doctor Home'}],
       }),
-    );
-  };
+    )
+  }
   
   const register = async () => {
-    Keyboard.dismiss();
-    checkValidate();
+    Keyboard.dismiss()
+    checkValidate()
     if (state.validation) {
       await axios({
         method: 'post',
@@ -72,18 +67,18 @@ const DoctorRegister = props => {
         },
       })
         .then(async response => {
-          if (response.data.status !== "0") {
-            props.navigation.navigate('Doctor Phone Verify' , {state: state});
+          if (response.data.status !== '0') {
+            props.navigation.navigate('Doctor Phone Verify' , {state: state})
           }
           else {
-            showToast(response.data.message, 'error');
+            showToast(response.data.message, 'error')
           }
         })
         .catch(error => {
-          console.log(error);
-        });
+          console.log(error)
+        })
     }
-  };
+  }
 
   const checkValidate = () => {
     if (
@@ -94,14 +89,14 @@ const DoctorRegister = props => {
       state.qualification == '' ||
       state.username == ''
     ) {
-      state.validation = false;
-      showToast('Please fill all the fields.', 'error');
-      return true;
+      state.validation = false
+      showToast('Please fill all the fields.', 'error')
+      return true
     } else {
-      state.validation = true;
-      return true;
+      state.validation = true
+      return true
     }
-  };
+  }
 
   return (
     <ScrollView>
@@ -170,7 +165,7 @@ const DoctorRegister = props => {
         </Stack>
       </Center>
     </ScrollView>
-  );
-};
+  )
+}
 
-export default DoctorRegister;
+export default DoctorRegister

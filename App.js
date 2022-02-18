@@ -1,46 +1,46 @@
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
-import {extendTheme, NativeBaseProvider} from 'native-base';
-import React from 'react';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
-import allReducers from './reducers/index.js';
-import {Colors} from './assets/Colors';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {LogBox} from 'react-native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native'
+import {extendTheme, NativeBaseProvider} from 'native-base'
+import React from 'react'
+import {Provider} from 'react-redux'
+import {createStore} from 'redux'
+import allReducers from './reducers/index.js'
+import {Colors} from './assets/Colors'
+import {createDrawerNavigator} from '@react-navigation/drawer'
+import {LogBox} from 'react-native'
 import {
   HomeStackNavigator,
   MainStackNavigator,
-} from './navigation/StackNavigator.js';
-import MyOrders from './views/MyOrders.js';
-import MyProfile from './views/MyProfile.js';
-import Home from './views/Home.js';
-import Login from './views/Login.js';
-import Register from './views/Register.js';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
-import Logout from './views/Logout.js';
-import Splash from './views/Splash.js';
-import MyBooking from './views/doctorViews/MyBooking.js';
-import MyBookingDetails from './views/MyBookingDetails.js';
-import MyBookingsDetails from './views/doctorViews/MyBookingsDetails.js';
-import DoctorChat from './views/doctorViews/DoctorChat.js';
-import {fb} from './config/firebaseConfig.js';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import DoctorLogin from './views/doctorViews/DoctorLogin.js';
-import DoctorRegister from './views/doctorViews/DoctorRegister.js';
-import VideoCall from './views/VideoCall.js';
-import Chat from './views/Chat.js';
-import DoctorHome from './views/doctorViews/DoctorHome.js';
-import DoctorVideoCall from './views/doctorViews/DoctorVideo.js';
-import DoctorsList from './views/DoctorsList.js';
-import createAppointment from './views/createAppointment.js';
-import {PhoneVerification} from './views/PhoneVerification.js';
-import { DoctorPhoneVerification } from './views/doctorViews/PhoneVerification.js';
+} from './navigation/StackNavigator.js'
+import MyOrders from './views/MyOrders.js'
+import MyProfile from './views/MyProfile.js'
+import Home from './views/Home.js'
+import Login from './views/Login.js'
+import Register from './views/Register.js'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
+import messaging from '@react-native-firebase/messaging'
+import Logout from './views/Logout.js'
+import Splash from './views/Splash.js'
+import MyBooking from './views/doctorViews/MyBooking.js'
+import MyBookingDetails from './views/MyBookingDetails.js'
+import MyBookingsDetails from './views/doctorViews/MyBookingsDetails.js'
+import DoctorChat from './views/doctorViews/DoctorChat.js'
+import {fb} from './config/firebaseConfig.js'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import DoctorLogin from './views/doctorViews/DoctorLogin.js'
+import DoctorRegister from './views/doctorViews/DoctorRegister.js'
+import VideoCall from './views/VideoCall.js'
+import Chat from './views/Chat.js'
+import DoctorHome from './views/doctorViews/DoctorHome.js'
+import DoctorVideoCall from './views/doctorViews/DoctorVideo.js'
+import DoctorsList from './views/DoctorsList.js'
+import createAppointment from './views/createAppointment.js'
+import {PhoneVerification} from './views/PhoneVerification.js'
+import { DoctorPhoneVerification } from './views/doctorViews/PhoneVerification.js'
 
-const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator()
+const Stack = createNativeStackNavigator()
 
-const store = createStore(allReducers);
+const store = createStore(allReducers)
 
 const theme = extendTheme({
   colors: {
@@ -74,7 +74,7 @@ const theme = extendTheme({
       400: '#d97706',
     },
   },
-});
+})
 
 const MyTheme = {
   ...DefaultTheme,
@@ -82,7 +82,7 @@ const MyTheme = {
     ...DefaultTheme.colors,
     background: '#fcfbff',
   },
-};
+}
 
 export default function App() {
   return (
@@ -128,7 +128,7 @@ export default function App() {
         </NavigationContainer>
       </NativeBaseProvider>
     </Provider>
-  );
+  )
 }
 
 const CustomerNavigator = () => {
@@ -146,8 +146,8 @@ const CustomerNavigator = () => {
       <Drawer.Screen name="My Appointment" component={MyOrders} />
       <Drawer.Screen name="Logout" component={Logout} />
     </Drawer.Navigator>
-  );
-};
+  )
+}
 
 const DoctorNavigator = () => (
   <Drawer.Navigator
@@ -162,4 +162,4 @@ const DoctorNavigator = () => (
     <Drawer.Screen name="My Booking" component={MyBooking} />
     <Drawer.Screen name="Logout" component={Logout} />
   </Drawer.Navigator>
-);
+)

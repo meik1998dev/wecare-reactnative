@@ -1,37 +1,24 @@
-import axios from 'axios';
+import axios from 'axios'
 import {
   Box,
   Button,
-  CheckIcon,
-  Container,
-  Icon,
   Input,
   ScrollView,
   Select,
   Text,
   VStack,
-} from 'native-base';
-import React from 'react';
-import {Keyboard, Image, TouchableOpacity} from 'react-native';
-import {connect} from 'react-redux';
+} from 'native-base'
+import React from 'react'
+import {Keyboard, Image} from 'react-native'
 import {
   api_url,
   get_blood_list,
   get_profile,
   img_url,
   profile_update,
-} from '../config/Constants';
-import {
-  editServiceActionPending,
-  editServiceActionError,
-  editServiceActionSuccess,
-  updateServiceActionPending,
-  updateServiceActionError,
-  updateServiceActionSuccess,
-  updateProfilePicture,
-} from '../actions/ProfileActions';
-import {Colors} from '../assets/Colors';
-import Loader from '../components/Loader';
+} from '../config/Constants'
+import {Colors} from '../assets/Colors'
+import Loader from '../components/Loader'
 
 const MyProfile = props => {
   const [state, setState] = React.useState({
@@ -45,23 +32,23 @@ const MyProfile = props => {
     gov_id: '',
     validation: true,
     blood_group: '',
-  });
-  const [loading, setLoading] = React.useState(true);
-  const [bloodList, setBloodList] = React.useState([]);
+  })
+  const [loading, setLoading] = React.useState(true)
+  const [bloodList, setBloodList] = React.useState([])
 
   React.useEffect(() => {
-    getProfile();
-  }, []);
+    getProfile()
+  }, [])
 
   const getProfile = async () => {
-    setLoading(true);
+    setLoading(true)
     await axios({
       method: 'post',
       url: api_url + get_profile,
       data: {customer_id: global.id},
     })
       .then(response => {
-        console.log(response.data);
+        console.log(response.data)
         setState({
           ...state,
           first_name: response.data.result.first_name,
@@ -72,16 +59,16 @@ const MyProfile = props => {
           phone_number: response.data.result.phone_number,
           profile_picture: response.data.result.profile_picture,
           blood_group: response.data.result.blood_group,
-        });
-        getBloodList();
+        })
+        getBloodList()
 
-        setLoading(false);
+        setLoading(false)
       })
       .catch(error => {
-        console.log(error);
+        console.log(error)
         // setLoading(false);
-      });
-  };
+      })
+  }
 
   const getBloodList = async () => {
     await axios({
@@ -89,17 +76,17 @@ const MyProfile = props => {
       url: api_url + get_blood_list,
     })
       .then(async response => {
-        setBloodList(response.data.result);
+        setBloodList(response.data.result)
       })
       .catch(error => {
-        console.log(error);
-        alert('Sorry, something went wrong!');
-      });
-  };
+        console.log(error)
+        alert('Sorry, something went wrong!')
+      })
+  }
 
   const select_blood_group = value => {
-    setState({...state, blood_group: value});
-  };
+    setState({...state, blood_group: value})
+  }
 
   const checkValidate = () => {
     if (
@@ -108,15 +95,15 @@ const MyProfile = props => {
       state.blood_group == '' ||
       state.first_name == ''
     ) {
-      state.validation = false;
-      alert('Please fill all the fields.');
-      return true;
+      state.validation = false
+      alert('Please fill all the fields.')
+      return true
     }
-  };
+  }
 
   const updateProfile = async () => {
-    Keyboard.dismiss();
-    await checkValidate();
+    Keyboard.dismiss()
+    await checkValidate()
     if (state.validation) {
       await axios({
         method: 'post',
@@ -134,29 +121,29 @@ const MyProfile = props => {
         },
       })
         .then(async response => {
-          console.log(response.data);
-          alert('Successfully updated');
-          await saveData();
+          console.log(response.data)
+          alert('Successfully updated')
+          await saveData()
         })
         .catch(error => {
-          alert(error);
-        });
+          alert(error)
+        })
     }
-  };
-  console.log(state);
+  }
+  console.log(state)
   const saveData = async () => {
     try {
-      await AsyncStorage.setItem('user_id', props.data.id.toString());
+      await AsyncStorage.setItem('user_id', props.data.id.toString())
       await AsyncStorage.setItem(
         'first_name',
         props.data.first_name.toString(),
-      );
-      global.id = await props.data.id;
-      global.first_name = await props.data.first_name;
+      )
+      global.id = await props.data.id
+      global.first_name = await props.data.first_name
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
-  };
+  }
 
   return (
     <>
@@ -320,7 +307,7 @@ const MyProfile = props => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default MyProfile;
+export default MyProfile

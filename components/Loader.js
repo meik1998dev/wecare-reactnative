@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 import {
   Spinner,
   HStack,
   Heading,
   Center,
   NativeBaseProvider,
-} from 'native-base';
+} from 'native-base'
 
-import {Colors} from '../assets/Colors.js';
+import {Colors} from '../assets/Colors.js'
 
 const Loader = () => {
   return (
@@ -19,7 +19,7 @@ const Loader = () => {
         </Heading>
       </HStack>
     </Center>
-  );
-};
+  )
+}
 
-export default Loader;
+export default Loader

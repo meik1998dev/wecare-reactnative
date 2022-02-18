@@ -1,37 +1,37 @@
-import React, {Component} from 'react';
-import axios from 'axios';
-import Moment from 'moment';
-import {Box, Button, Container, Text, View, VStack} from 'native-base';
-import {Colors} from '../../assets/Colors';
-import {api_url, booking_details, doctorthree} from '../../config/Constants';
-import {Image} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import React, {Component} from 'react'
+import axios from 'axios'
+import Moment from 'moment'
+import {Box, Button, Text, View, VStack} from 'native-base'
+import {Colors} from '../../assets/Colors'
+import {api_url, doctorthree} from '../../config/Constants'
+import {Image} from 'react-native'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export default class BookingRequest extends Component {
   constructor(props) {
-    super(props);
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    super(props)
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this)
     this.state = {
       isLoading: false,
       data: this.props.route.params.data,
       new_status: undefined,
-    };
+    }
     // this.get_new_status();
   }
 
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating,
-    });
+    })
   }
 
   handleBackButtonClick() {
-    this.props.navigation.goBack(null);
-    return true;
+    this.props.navigation.goBack(null)
+    return true
   }
 
   get_new_status = async () => {
-    this.setState({isLoading: true});
+    this.setState({isLoading: true})
     await axios({
       method: 'post',
       url: api_url + 'doctor/get_new_status',
@@ -39,60 +39,60 @@ export default class BookingRequest extends Component {
     })
       .then(async response => {
         if (response.data.status) {
-          let data = this.state.data;
-          data.new_status = response.data.result.id;
-          data.new_status_name = response.data.result.status_name;
-          console.log(response.data.result);
+          let data = this.state.data
+          data.new_status = response.data.result.id
+          data.new_status_name = response.data.result.status_name
+          console.log(response.data.result)
           await this.setState({
             isLoading: false,
             data: data,
             new_status: response.data.result.id,
-          });
+          })
         }
       })
       .catch(error => {
-        this.setState({isLoading: false});
-        console.log(error);
-        alert('Sorry, something went wrong');
-      });
-  };
+        this.setState({isLoading: false})
+        console.log(error)
+        alert('Sorry, something went wrong')
+      })
+  }
 
   status_change = async status => {
-    this.setState({isLoading: true});
+    this.setState({isLoading: true})
     await axios({
       method: 'post',
       url: api_url + status_change,
       data: {booking_id: this.state.data.id, status: status},
     })
       .then(async response => {
-        let data = await this.state.data;
-        data.status = await response.data.result;
-        await this.setState({isLoading: false, data: data});
-        await this.get_new_status();
+        let data = await this.state.data
+        data.status = await response.data.result
+        await this.setState({isLoading: false, data: data})
+        await this.get_new_status()
       })
       .catch(error => {
-        this.setState({isLoading: false});
-        console.log(error);
-        alert('Sorry, something went wrong');
-      });
-  };
+        this.setState({isLoading: false})
+        console.log(error)
+        alert('Sorry, something went wrong')
+      })
+  }
 
   write_prescription = async () => {
-    this.props.navigation.navigate('Prescription', {data: this.state.data});
-  };
+    this.props.navigation.navigate('Prescription', {data: this.state.data})
+  }
 
   chat = () => {
-    this.props.navigation.navigate('Doctor Chat', {data: this.state.data});
-  };
+    this.props.navigation.navigate('Doctor Chat', {data: this.state.data})
+  }
 
   video = () => {
     this.props.navigation.navigate('DoctorVideo', {
       booking_id: this.state.data.id,
-    });
-  };
+    })
+  }
 
   render() {
-    console.log(this.state.data);
+    console.log(this.state.data)
     return (
       <Box w={'100%'}>
         <View>
@@ -292,6 +292,6 @@ export default class BookingRequest extends Component {
           )}
         </VStack>
       </Box>
-    );
+    )
   }
 }

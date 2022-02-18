@@ -1,21 +1,19 @@
-import React from 'react';
-import {StyleSheet, Keyboard, Alert} from 'react-native';
-import {Button, Center, Icon, Stack} from 'native-base';
-import {api_url, login_url} from '../config/Constants';
-import axios from 'axios';
-import {connect} from 'react-redux';
+import React from 'react'
+import {StyleSheet, Keyboard, Alert} from 'react-native'
+import {Button, Center, Icon, Stack} from 'native-base'
+import {api_url, login_url} from '../config/Constants'
+import axios from 'axios'
+import {connect} from 'react-redux'
 import {
   serviceActionPending,
   serviceActionError,
   serviceActionSuccess,
-} from '../actions/LoginActions';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
-import {CommonActions} from '@react-navigation/native';
-import {Input} from 'native-base';
-import {useToast} from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Colors} from '../assets/Colors';
+} from '../actions/LoginActions'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
+import {CommonActions} from '@react-navigation/native'
+import {Input} from 'native-base'
+import {useToast} from 'native-base'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export const Login = props => {
   const [state, setState] = React.useState({
@@ -24,15 +22,15 @@ export const Login = props => {
     isLoding: false,
     fcm_token: global.fcm_token,
     password: '',
-  });
-  const [show, setShow] = React.useState(false);
+  })
+  const [show, setShow] = React.useState(false)
 
-  const toast = useToast();
+  const toast = useToast()
 
   const login = async () => {
-    setState({...state, isLoding: true});
-    Keyboard.dismiss();
-    await checkValidate();
+    setState({...state, isLoding: true})
+    Keyboard.dismiss()
+    await checkValidate()
     if (state.validation) {
       await axios({
         method: 'post',
@@ -45,49 +43,49 @@ export const Login = props => {
       })
         .then(async response => {
           if (response.data.status !== 0) {
-            console.log(response.data);
-            setState({...state, isLoding: false});
-            await saveData(response.data);
+            console.log(response.data)
+            setState({...state, isLoding: false})
+            await saveData(response.data)
           } else {
-            showToast(response.data.message, 'error');
+            showToast(response.data.message, 'error')
           }
         })
         .catch(error => {
-          alert(error);
-          setState({...state, isLoding: false});
-          console.log(error);
-          props.serviceActionError(error);
-        });
+          alert(error)
+          setState({...state, isLoding: false})
+          console.log(error)
+          props.serviceActionError(error)
+        })
     }
-  };
+  }
 
   const checkValidate = () => {
     if (state.email == '' || state.password == '') {
-      state.validation = false;
-      showToast('Please fill all the fields.', 'error');
-      return true;
+      state.validation = false
+      showToast('Please fill all the fields.', 'error')
+      return true
     } else {
-      state.validation = true;
-      return true;
+      state.validation = true
+      return true
     }
-  };
+  }
 
   const saveData = async data => {
     try {
-      await AsyncStorageLib.setItem('user_id', data.result.id.toString());
+      await AsyncStorageLib.setItem('user_id', data.result.id.toString())
       await AsyncStorageLib.setItem(
         'first_name',
         data.result.first_name.toString(),
-      );
+      )
       await AsyncStorageLib.setItem(
         'phone_number',
         data.result.phone_number.toString(),
-      );
-      await AsyncStorageLib.setItem('email', data.result.email.toString());
-      global.id = data.result.id;
-      global.first_name = data.result.first_name;
-      global.phone_number = data.result.phone_number;
-      global.email = data.result.email;
+      )
+      await AsyncStorageLib.setItem('email', data.result.email.toString())
+      global.id = data.result.id
+      global.first_name = data.result.first_name
+      global.phone_number = data.result.phone_number
+      global.email = data.result.email
       Alert.alert(
         'Success',
         'You are logged in',
@@ -104,28 +102,28 @@ export const Login = props => {
           },
         ],
         {cancelable: false},
-      );
+      )
     } catch (e) {
-      console.log(e);
-      console.log('err');
+      console.log(e)
+      console.log('err')
     }
-  };
-  console.log(global.id);
+  }
+  console.log(global.id)
 
   const register = () => {
-    props.navigation.navigate('Register');
-  };
+    props.navigation.navigate('Register')
+  }
 
   const forgot = () => {
-    props.navigation.navigate('Forgot');
-  };
+    props.navigation.navigate('Forgot')
+  }
 
   const showToast = (msg, status) => {
     toast.show({
       title: msg,
       status: status,
-    });
-  };
+    })
+  }
 
   return (
     <Center flex={1} px="3">
@@ -184,8 +182,8 @@ export const Login = props => {
         </Button>
       </Stack>
     </Center>
-  );
-};
+  )
+}
 
 function mapStateToProps(state) {
   return {
@@ -194,14 +192,14 @@ function mapStateToProps(state) {
     data: state.login.data,
     message: state.login.message,
     status: state.login.status,
-  };
+  }
 }
 
 const mapDispatchToProps = dispatch => ({
   serviceActionPending: () => dispatch(serviceActionPending()),
   serviceActionError: error => dispatch(serviceActionError(error)),
   serviceActionSuccess: data => dispatch(serviceActionSuccess(data)),
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
-const styles = StyleSheet.create({});
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
+const styles = StyleSheet.create({})

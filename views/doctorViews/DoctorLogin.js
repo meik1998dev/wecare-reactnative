@@ -1,13 +1,13 @@
-import React from 'react';
-import {Alert, Keyboard} from 'react-native';
-import {Button, Center, Icon, Stack} from 'native-base';
-import {api_url} from '../../config/Constants';
-import axios from 'axios';
-import {Input} from 'native-base';
-import {useToast} from 'native-base';
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import {CommonActions} from '@react-navigation/native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import React from 'react'
+import {Alert, Keyboard} from 'react-native'
+import {Button, Center, Icon, Stack} from 'native-base'
+import {api_url} from '../../config/Constants'
+import axios from 'axios'
+import {Input} from 'native-base'
+import {useToast} from 'native-base'
+import AsyncStorageLib from '@react-native-async-storage/async-storage'
+import {CommonActions} from '@react-navigation/native'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 const DoctorLogin = props => {
   const [state, setState] = React.useState({
@@ -15,17 +15,17 @@ const DoctorLogin = props => {
     password: '',
     isLoading: false,
     fcm_token: global.fcm_token,
-  });
-  const [show, setShow] = React.useState(false);
+  })
+  const [show, setShow] = React.useState(false)
 
-  const toast = useToast();
+  const toast = useToast()
 
   const login = async () => {
-    setState({...state, isLoding: true});
-    Keyboard.dismiss();
-    await checkValidate();
+    setState({...state, isLoding: true})
+    Keyboard.dismiss()
+    await checkValidate()
     if (state.validation) {
-      console.log(state.fcm_token);
+      console.log(state.fcm_token)
       await axios({
         method: 'post',
         url: api_url + 'doctor/login',
@@ -36,89 +36,89 @@ const DoctorLogin = props => {
         },
       })
         .then(async response => {
-          setState({...state, isLoding: false});
+          setState({...state, isLoding: false})
           if (response.data.status === 0) {
-            alert(response.data.message);
+            alert(response.data.message)
           }
-          await saveData(response.data);
+          await saveData(response.data)
         })
         .catch(error => {
-          setState({...state, isLoding: false});
-          console.log(error);
-        });
+          setState({...state, isLoding: false})
+          console.log(error)
+        })
     }
-  };
+  }
 
   const checkValidate = () => {
     if (state.username == '' || state.password == '') {
-      state.validation = false;
-      showToast('Please fill all the fields.', 'error');
-      return true;
+      state.validation = false
+      showToast('Please fill all the fields.', 'error')
+      return true
     } else {
-      state.validation = true;
-      return true;
+      state.validation = true
+      return true
     }
-  };
+  }
 
   const saveData = async data => {
     if (data.status == 1) {
       try {
-        await AsyncStorageLib.setItem('user_id', data.result.id.toString());
-        await AsyncStorageLib.setItem('id', data.result.id.toString());
+        await AsyncStorageLib.setItem('user_id', data.result.id.toString())
+        await AsyncStorageLib.setItem('id', data.result.id.toString())
         await AsyncStorageLib.setItem(
           'doctor_name',
           data.result.doctor_name.toString(),
-        );
-        await AsyncStorageLib.setItem('email', data.result.email.toString());
+        )
+        await AsyncStorageLib.setItem('email', data.result.email.toString())
         await AsyncStorageLib.setItem(
           'phone_number',
           data.result.phone_number.toString(),
-        );
+        )
         await AsyncStorageLib.setItem(
           'profile_status',
           data.result.profile_status.toString(),
-        );
+        )
         await AsyncStorageLib.setItem(
           'document_update_status',
           data.result.document_update_status.toString(),
-        );
-        global.id = await data.result.id;
-        global.doctor_name = await data.result.doctor_name;
-        global.email = await data.result.email;
-        global.phone_number = await data.result.phone_number;
-        global.profile_status = await data.result.profile_status;
+        )
+        global.id = await data.result.id
+        global.doctor_name = await data.result.doctor_name
+        global.email = await data.result.email
+        global.phone_number = await data.result.phone_number
+        global.profile_status = await data.result.profile_status
         global.document_update_status = await data.result
-          .document_update_status;
+          .document_update_status
         Alert.alert(
           'Success',
           'You are Logged In.',
           [{text: 'OK', onPress: () => home()}],
           {cancelable: false},
-        );
+        )
       } catch (e) {
-        console.log(e);
-        alert('Sorry something went wrong');
+        console.log(e)
+        alert('Sorry something went wrong')
       }
     } else {
-      alert(result.message);
+      alert(result.message)
     }
-  };
+  }
 
   const register = () => {
-    props.navigation.navigate('Doctor Register');
-  };
+    props.navigation.navigate('Doctor Register')
+  }
 
   const forgot = () => {
-    props.navigation.navigate('Doctor Forgot');
-  };
+    props.navigation.navigate('Doctor Forgot')
+  }
 
   const showToast = (msg, status) => {
     toast.show({
       title: msg,
       status: status,
       //  duration: Snackbar.LENGTH_SHORT,
-    });
-  };
+    })
+  }
 
   const home = () => {
     props.navigation.dispatch(
@@ -126,8 +126,8 @@ const DoctorLogin = props => {
         index: 0,
         routes: [{name: 'Doctor Home'}],
       }),
-    );
-  };
+    )
+  }
 
   return (
     <Center flex={1} px="3">
@@ -185,7 +185,7 @@ const DoctorLogin = props => {
         </Button>
       </Stack>
     </Center>
-  );
-};
+  )
+}
 
-export default DoctorLogin;
+export default DoctorLogin

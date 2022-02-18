@@ -1,20 +1,20 @@
-import {Box, Button, Center, Input, Text, VStack} from 'native-base';
-import React from 'react';
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import {Colors} from '../assets/Colors';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Alert, StyleSheet} from 'react-native';
-import axios from 'axios';
+import {Box, Button, Center, Input, Text, VStack} from 'native-base'
+import React from 'react'
+import DateTimePicker from 'react-native-modal-datetime-picker'
+import {Colors} from '../assets/Colors'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import {Alert, StyleSheet} from 'react-native'
+import axios from 'axios'
 import {
   api_url,
   check_available_timing,
   create_booking,
-} from '../config/Constants';
-import Loader from '../components/Loader';
+} from '../config/Constants'
+import Loader from '../components/Loader'
 import {
   RNPaymentSDKLibrary,
   PaymentSDKConfiguration,
-} from '@paytabs/react-native-paytabs';
+} from '@paytabs/react-native-paytabs'
 
 const createAppointment = props => {
   const [state, setState] = React.useState({
@@ -28,11 +28,11 @@ const createAppointment = props => {
     type: 1,
     price_per_conversation: 150,
     isLoding: false,
-  });
+  })
 
   const createBooking = async () => {
-    setState({...state, isLoding: true});
-    console.log(state);
+    setState({...state, isLoding: true})
+    console.log(state)
     await axios({
       method: 'post',
       url: api_url + create_booking,
@@ -49,16 +49,16 @@ const createAppointment = props => {
       },
     })
       .then(async response => {
-        setState({...state, isLoding: false});
+        setState({...state, isLoding: false})
         if (response.data.status == 0) {
-          alert(response.data.message);
+          alert(response.data.message)
         } else {
           setState({
             ...state,
             title: '',
             description: '',
             start_time: '',
-          });
+          })
         }
 
         if (response.data.status == 1) {
@@ -67,18 +67,18 @@ const createAppointment = props => {
             'Your order has been successfully placed.',
             [{text: 'OK', onPress: () => navigateToMyOrders()}],
             {cancelable: false},
-          );
+          )
         }
       })
       .catch(error => {
-        alert('something went wrong');
-        console.log(error);
-        setState({...state, isLoding: false});
-      });
-  };
+        alert('something went wrong')
+        console.log(error)
+        setState({...state, isLoding: false})
+      })
+  }
 
   const check_timing = async () => {
-    setState({isLoding: true});
+    setState({isLoding: true})
     await axios({
       method: 'post',
       url: api_url + check_available_timing,
@@ -89,23 +89,23 @@ const createAppointment = props => {
       },
     })
       .then(async response => {
-        setState({isLoding: false});
+        setState({isLoding: false})
         if (response.data.status == 0) {
-          alert(response.data.message);
+          alert(response.data.message)
         } else {
-          createBooking();
+          createBooking()
         }
       })
       .catch(error => {
-        console.log(error);
-        alert('something went wrong');
-        setState({isLoding: false});
-      });
-  };
+        console.log(error)
+        alert('something went wrong')
+        setState({isLoding: false})
+      })
+  }
 
   const navigateToMyOrders = () => {
-    props.navigation.navigate('My Orders');
-  };
+    props.navigation.navigate('My Orders')
+  }
 
   const onPay = () => {
     var billingDetails = {
@@ -117,76 +117,76 @@ const createAppointment = props => {
       state: 'Dubai',
       countryCode: 'AE',
       zip: '1234',
-    };
+    }
 
-    let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = 89479;
-    configuration.serverKey = 'SJJN2GDLNH-JDB6RZRHBR-JDDZWKWZDB';
-    configuration.clientKey = 'CDKMQP-NQ6P6D-2GR9RH-2TTRV7';
-    configuration.cartID = '44444';
-    configuration.currency = 'MAD';
-    configuration.cartDescription = 'Flowers';
-    configuration.merchantCountryCode = 'MA';
-    configuration.merchantName = 'Flowers Store';
-    configuration.amount = 20;
-    configuration.screenTitle = 'Pay with Card';
-    configuration.billingDetails = billingDetails;
-    configuration.forceShippingInfo = false;
-    configuration.showBillingInfo = true;
+    let configuration = new PaymentSDKConfiguration()
+    configuration.profileID = 89479
+    configuration.serverKey = 'SJJN2GDLNH-JDB6RZRHBR-JDDZWKWZDB'
+    configuration.clientKey = 'CDKMQP-NQ6P6D-2GR9RH-2TTRV7'
+    configuration.cartID = '44444'
+    configuration.currency = 'MAD'
+    configuration.cartDescription = 'Flowers'
+    configuration.merchantCountryCode = 'MA'
+    configuration.merchantName = 'Flowers Store'
+    configuration.amount = 20
+    configuration.screenTitle = 'Pay with Card'
+    configuration.billingDetails = billingDetails
+    configuration.forceShippingInfo = false
+    configuration.showBillingInfo = true
 
     RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then(
       result => {
         if (result['PaymentDetails'] != null) {
-          let paymentDetails = result['PaymentDetails'];
-          createBooking();
-          console.log(paymentDetails);
+          let paymentDetails = result['PaymentDetails']
+          createBooking()
+          console.log(paymentDetails)
         } else if (result['Event'] == 'CancelPayment') {
-          console.log('Cancel Payment Event');
+          console.log('Cancel Payment Event')
         }
       },
       function (error) {
-        alert(error);
+        alert(error)
       },
-    );
-  };
+    )
+  }
 
   const showDeliveryDatePicker = () => {
-    setState({...state, deliveryDatePickerVisible: true});
-  };
+    setState({...state, deliveryDatePickerVisible: true})
+  }
 
   const hideDeliveryDatePicker = () => {
-    setState({...state, deliveryDatePickerVisible: false});
-  };
+    setState({...state, deliveryDatePickerVisible: false})
+  }
 
   const handleDeliveryDatePicked = async date => {
-    var d = new Date(date);
+    var d = new Date(date)
     let delivery_date =
       d.getDate() +
       '-' +
       ('0' + (d.getMonth() + 1)).slice(-2) +
       '-' +
-      d.getFullYear();
-    let hr = d.getHours();
-    let min = d.getMinutes();
+      d.getFullYear()
+    let hr = d.getHours()
+    let min = d.getMinutes()
     if (min < 10) {
-      min = '0' + min;
+      min = '0' + min
     }
-    let ampm = 'AM';
+    let ampm = 'AM'
     if (hr > 12) {
-      hr -= 12;
-      ampm = 'PM';
+      hr -= 12
+      ampm = 'PM'
     }
-    let delivery_time = hr + ':' + min + ' ' + ampm;
+    let delivery_time = hr + ':' + min + ' ' + ampm
 
-    let start_time = delivery_date + ' ' + delivery_time;
+    let start_time = delivery_date + ' ' + delivery_time
     setState({
       ...state,
       start_time: start_time,
       delivery_date: delivery_date,
       deliveryDatePickerVisible: false,
       delivery_time: delivery_time,
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -222,7 +222,7 @@ const createAppointment = props => {
             shadow={3}
             style={styles.appintCard}>
             <Text fontWeight={'bold'} color={Colors.teal}>
-              Description
+                        Description
             </Text>
             <Input
               width={'full'}
@@ -246,12 +246,6 @@ const createAppointment = props => {
               px={5}
               onPress={showDeliveryDatePicker}>
               <Center>
-                {/* <EvilIcons
-                     style={{ color: Colors.white, paddingBottom: 0 }}
-                     name='calendar'
-                     size={28}
-                     color='black'
-                  /> */}
                 <FontAwesome
                   style={{color: Colors.white, paddingBottom: 0}}
                   name="calendar-o"
@@ -278,13 +272,13 @@ const createAppointment = props => {
             py={4}
             size={'lg'}
             shadow={2}>
-            Confirm
+                            Confirm
           </Button>
         </VStack>
       )}
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   appintCard: {
@@ -294,6 +288,6 @@ const styles = StyleSheet.create({
     height: 140,
     alignItems: 'center',
   },
-});
+})
 
-export default createAppointment;
+export default createAppointment

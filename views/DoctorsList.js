@@ -1,46 +1,44 @@
-import axios from 'axios';
+import axios from 'axios'
 import {
-  Container,
   Text,
   Box,
-  Icon,
   ScrollView,
   VStack,
   ArrowForwardIcon,
-} from 'native-base';
-import React from 'react';
-import {StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {AirbnbRating, Rating} from 'react-native-ratings';
-import {Colors} from '../assets/Colors';
-import Loader from '../components/Loader';
-import {api_url, get_doctor_by_services, img_url} from '../config/Constants';
+} from 'native-base'
+import React from 'react'
+import {StyleSheet, TouchableOpacity, Image} from 'react-native'
+import {AirbnbRating} from 'react-native-ratings'
+import {Colors} from '../assets/Colors'
+import Loader from '../components/Loader'
+import {api_url, img_url} from '../config/Constants'
 
 const DoctorsList = props => {
   const [state, setState] = React.useState({
     result: [],
     api_status: 0,
     isLoding: false,
-  });
+  })
 
   const getDoctors = async () => {
-    setState({...state, isLoding: true});
+    setState({...state, isLoding: true})
     try {
       const response = await axios({
         method: 'get',
         url: api_url + 'doctors',
-      });
-      setState({...state, isLoding: false});
-      setState({...state, result: response.data.result});
+      })
+      setState({...state, isLoding: false})
+      setState({...state, result: response.data.result})
     } catch (error) {
-      setState({...state, isLoding: false});
-      alert('Something went wrong');
-      console.log(error);
+      setState({...state, isLoding: false})
+      alert('Something went wrong')
+      console.log(error)
     }
-  };
+  }
 
   React.useEffect(() => {
-    getDoctors();
-  }, []);
+    getDoctors()
+  }, [])
 
   return (
     <>
@@ -124,8 +122,8 @@ const DoctorsList = props => {
         </VStack>
       )}
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   doctorCard: {
@@ -143,6 +141,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 10,
   },
-});
+})
 
-export default DoctorsList;
+export default DoctorsList

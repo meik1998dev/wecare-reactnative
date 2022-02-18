@@ -8,8 +8,8 @@ import {Colors} from './assets/Colors'
 import {createDrawerNavigator} from '@react-navigation/drawer'
 import {LogBox} from 'react-native'
 import {
-    HomeStackNavigator,
-    MainStackNavigator,
+  HomeStackNavigator,
+  MainStackNavigator,
 } from './navigation/StackNavigator.js'
 import MyOrders from './views/MyOrders.js'
 import MyProfile from './views/MyProfile.js'
@@ -43,123 +43,123 @@ const Stack = createNativeStackNavigator()
 const store = createStore(allReducers)
 
 const theme = extendTheme({
-    colors: {
+  colors: {
     // Add new color
-        primary: {
-            50: Colors.vintage,
-            100: Colors.vintage,
-            200: Colors.vintage,
-            300: Colors.vintage,
-            400: Colors.vintage,
-            500: Colors.vintage,
-            600: Colors.vintage,
-            700: Colors.purpel,
-            800: Colors.purpel,
-            900: Colors.purpel,
-        },
-        secondary: {
-            50: Colors.yellow,
-            100: Colors.yellow,
-            200: Colors.yellow,
-            300: Colors.yellow,
-            400: Colors.yellow,
-            500: Colors.yellow,
-            600: Colors.yellow,
-            700: '#FC9918',
-            800: '#FC9918',
-            900: '#FC9918',
-        },
-        // Redefinig only one shade, rest of the color will remain same.
-        amber: {
-            400: '#d97706',
-        },
+    primary: {
+      50: Colors.vintage,
+      100: Colors.vintage,
+      200: Colors.vintage,
+      300: Colors.vintage,
+      400: Colors.vintage,
+      500: Colors.vintage,
+      600: Colors.vintage,
+      700: Colors.purpel,
+      800: Colors.purpel,
+      900: Colors.purpel,
     },
+    secondary: {
+      50: Colors.yellow,
+      100: Colors.yellow,
+      200: Colors.yellow,
+      300: Colors.yellow,
+      400: Colors.yellow,
+      500: Colors.yellow,
+      600: Colors.yellow,
+      700: '#FC9918',
+      800: '#FC9918',
+      900: '#FC9918',
+    },
+    // Redefinig only one shade, rest of the color will remain same.
+    amber: {
+      400: '#d97706',
+    },
+  },
 })
 
 const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-        ...DefaultTheme.colors,
-        background: '#fcfbff',
-    },
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#fcfbff',
+  },
 }
 
 export default function App() {
-    return (
-        <Provider store={store}>
-            <NativeBaseProvider theme={theme}>
-                <NavigationContainer theme={MyTheme}>
-                    <Stack.Navigator screenOptions={{headerShown: false}}>
-                        <Stack.Screen
-                            options={{
-                                title: 'We care',
-                                headerTitleAlign: 'center',
-                            }}
-                            name="Splash"
-                            component={Splash}
-                        />
-                        <Stack.Screen name="Doctor Home" component={DoctorNavigator} />
-                        <Stack.Screen name="HomeStack" component={CustomerNavigator} />
-                        <Stack.Screen name="Doctor Login" component={DoctorLogin} />
-                        <Stack.Screen name="Doctor Register" component={DoctorRegister} />
-                        <Stack.Screen name="Login" component={Login} />
-                        <Stack.Screen name="Register" component={Register} />
-                        <Stack.Screen name="Phone Verify" component={PhoneVerification} />
-                        <Stack.Screen name="Doctor Phone Verify" component={DoctorPhoneVerification} />
-                        <Stack.Screen
-                            name="My Booking Details"
-                            component={MyBookingDetails}
-                        />
-                        <Stack.Screen
-                            name="Booking Details"
-                            component={MyBookingsDetails}
-                        />
-                        <Stack.Screen
-                            name="Create Appointment"
-                            component={createAppointment}
-                        />
-                        <Stack.Screen name="Video" component={VideoCall} />
-                        <Stack.Screen name="DoctorsList" component={DoctorsList} />
-                        <Stack.Screen name="Chat" component={Chat} />
-                        <Stack.Screen name="My Orders" component={MyOrders} />
-                        <Stack.Screen name="Doctor Chat" component={DoctorChat} />
-                        <Stack.Screen name="DoctorVideo" component={DoctorVideoCall} />
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </NativeBaseProvider>
-        </Provider>
-    )
+  return (
+    <Provider store={store}>
+      <NativeBaseProvider theme={theme}>
+        <NavigationContainer theme={MyTheme}>
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen
+              options={{
+                title: 'We care',
+                headerTitleAlign: 'center',
+              }}
+              name="Splash"
+              component={Splash}
+            />
+            <Stack.Screen name="Doctor Home" component={DoctorNavigator} />
+            <Stack.Screen name="HomeStack" component={CustomerNavigator} />
+            <Stack.Screen name="Doctor Login" component={DoctorLogin} />
+            <Stack.Screen name="Doctor Register" component={DoctorRegister} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Phone Verify" component={PhoneVerification} />
+            <Stack.Screen name="Doctor Phone Verify" component={DoctorPhoneVerification} />
+            <Stack.Screen
+              name="My Booking Details"
+              component={MyBookingDetails}
+            />
+            <Stack.Screen
+              name="Booking Details"
+              component={MyBookingsDetails}
+            />
+            <Stack.Screen
+              name="Create Appointment"
+              component={createAppointment}
+            />
+            <Stack.Screen name="Video" component={VideoCall} />
+            <Stack.Screen name="DoctorsList" component={DoctorsList} />
+            <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="My Orders" component={MyOrders} />
+            <Stack.Screen name="Doctor Chat" component={DoctorChat} />
+            <Stack.Screen name="DoctorVideo" component={DoctorVideoCall} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </Provider>
+  )
 }
 
 const CustomerNavigator = () => {
-    return (
-        <Drawer.Navigator
-            screenOptions={{
-                headerTitle: 'We Care',
-                headerTitleAlign: 'center',
-                headerStyle: {
-                    backgroundColor: Colors.white,
-                },
-            }}>
-            <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="Profile" component={MyProfile} />
-            <Drawer.Screen name="My Appointment" component={MyOrders} />
-            <Drawer.Screen name="Logout" component={Logout} />
-        </Drawer.Navigator>
-    )
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerTitle: 'We Care',
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: Colors.white,
+        },
+      }}>
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Profile" component={MyProfile} />
+      <Drawer.Screen name="My Appointment" component={MyOrders} />
+      <Drawer.Screen name="Logout" component={Logout} />
+    </Drawer.Navigator>
+  )
 }
 
 const DoctorNavigator = () => (
-    <Drawer.Navigator
-        screenOptions={{
-            headerTitle: 'We Care',
-            headerTitleAlign: 'center',
-            headerStyle: {
-                backgroundColor: Colors.white,
-            },
-        }}>
-        <Drawer.Screen name="Home" component={DoctorHome} />
-        <Drawer.Screen name="My Booking" component={MyBooking} />
-        <Drawer.Screen name="Logout" component={Logout} />
-    </Drawer.Navigator>
+  <Drawer.Navigator
+    screenOptions={{
+      headerTitle: 'We Care',
+      headerTitleAlign: 'center',
+      headerStyle: {
+        backgroundColor: Colors.white,
+      },
+    }}>
+    <Drawer.Screen name="Home" component={DoctorHome} />
+    <Drawer.Screen name="My Booking" component={MyBooking} />
+    <Drawer.Screen name="Logout" component={Logout} />
+  </Drawer.Navigator>
 )

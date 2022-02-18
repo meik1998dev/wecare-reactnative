@@ -18,37 +18,37 @@ import DoctorVideoCall from '../views/doctorViews/DoctorVideo'
 const Stack = createNativeStackNavigator()
 
 const MainStackNavigator = () => {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='Splash' component={Splash} />
-            <Stack.Screen name='DoctorVideo' component={DoctorVideoCall} />
-            <Stack.Screen name='Doctor Home' component={DoctorHome} />
-            <Stack.Screen name='Doctor Login' component={DoctorLogin}/>
-            <Stack.Screen name='Doctor Register' component={DoctorRegister}/>
-            <Stack.Screen name='Login' component={Login} />
-            <Stack.Screen name='HomeStack' component={Home} />
-            <Stack.Screen name='Register' component={Register} />
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Splash' component={Splash} />
+      <Stack.Screen name='DoctorVideo' component={DoctorVideoCall} />
+      <Stack.Screen name='Doctor Home' component={DoctorHome} />
+      <Stack.Screen name='Doctor Login' component={DoctorLogin}/>
+      <Stack.Screen name='Doctor Register' component={DoctorRegister}/>
+      <Stack.Screen name='Login' component={Login} />
+      <Stack.Screen name='HomeStack' component={Home} />
+      <Stack.Screen name='Register' component={Register} />
          
-            <Stack.Screen name='Video' component={VideoCall} />
-            <Stack.Screen name='DoctorsList' component={DoctorsList} />
-            <Stack.Screen name='My Orders' component={MyOrders} />
-            <Stack.Screen
-                name='Create Appointment'
-                component={createAppointment}
-            />
-            <Stack.Screen name='Chat' component={Chat} />
-            <Stack.Screen name='My Booking Details' component={MyBookingDetails} />
-            <Stack.Screen name='Forgot' component={Forgot} />
-        </Stack.Navigator>
-    )
+      <Stack.Screen name='Video' component={VideoCall} />
+      <Stack.Screen name='DoctorsList' component={DoctorsList} />
+      <Stack.Screen name='My Orders' component={MyOrders} />
+      <Stack.Screen
+        name='Create Appointment'
+        component={createAppointment}
+      />
+      <Stack.Screen name='Chat' component={Chat} />
+      <Stack.Screen name='My Booking Details' component={MyBookingDetails} />
+      <Stack.Screen name='Forgot' component={Forgot} />
+    </Stack.Navigator>
+  )
 }
 
 const HomeStackNavigator = () => {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name='Home' component={Home} />
-        </Stack.Navigator>
-    )
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='Home' component={Home} />
+    </Stack.Navigator>
+  )
 }
 
 export { HomeStackNavigator, MainStackNavigator }

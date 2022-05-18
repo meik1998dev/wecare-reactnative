@@ -8,6 +8,7 @@ import axios from 'axios'
 import Loader from '../components/Loader'
 import { Colors } from '../assets/Colors'
 import AsyncStorageLib from '@react-native-async-storage/async-storage'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const Home = (props) => {
   const [state, setState] = React.useState({
@@ -16,10 +17,26 @@ const Home = (props) => {
     category: [],
     doctors: [],
   })
-  
+
   React.useEffect(() => {
     fetchHomeData()
     getToken()
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification
+      )
+    })
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification
+          )
+        }
+      })
   }, [])
 
   const getToken = async () => {
@@ -70,7 +87,8 @@ const Home = (props) => {
           padding: 50,
           height: 120,
           marginTop: 10,
-        }}>
+        }}
+      >
         <Image style={{ width: '100%', height: '100%' }} source={{ uri: img_url + item.url }} />
       </Box>
     )
@@ -89,11 +107,13 @@ const Home = (props) => {
             alignItems: 'center',
             justifyContent: 'space-around',
             marginVertical: 3,
-          }}>
+          }}
+        >
           <Image
             style={{ width: 132, height: 132, borderRadius: 100 }}
             alt="cat"
-            source={{ uri: img_url + item.category_image }}></Image>
+            source={{ uri: img_url + item.category_image }}
+          ></Image>
         </Box>
         <Text fontWeight="bold" mt={5} alignSelf="center">
           {item.category_name}
@@ -101,8 +121,6 @@ const Home = (props) => {
       </Box>
     )
   }
-
-  console.log(state)
 
   return (
     <>
@@ -133,7 +151,8 @@ const Home = (props) => {
                 style={{
                   justifyContent: 'center',
                   flexDirection: 'row',
-                }}>
+                }}
+              >
                 <Carousel
                   data={state.category}
                   renderItem={_renderCategoriesItem}
@@ -156,7 +175,8 @@ const Home = (props) => {
                 style={{
                   justifyContent: 'center',
                   flexDirection: 'row',
-                }}>
+                }}
+              >
                 <ScrollView horizontal={true}>
                   {state.doctors.map((item) => {
                     return (
@@ -172,17 +192,24 @@ const Home = (props) => {
                           marginHorizontal: 20,
                           justifyContent: 'space-around',
                           alignItems: 'center',
-                        }}>
-                        <Image
-                          style={{
-                            width: 150,
-                            height: 105,
-                            borderTopRightRadius: 25,
-                            borderTopLeftRadius: 25,
-                          }}
-                          source={{ uri: img_url + item.profile_image }}
-                        />
-                        <Text>{item.doctor_name}</Text>
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() =>
+                            props.navigation.navigate('DoctorOverview', { data: item })
+                          }
+                        >
+                          <Image
+                            style={{
+                              width: 150,
+                              height: 105,
+                              borderTopRightRadius: 25,
+                              borderTopLeftRadius: 25,
+                            }}
+                            source={{ uri: img_url + item.profile_image }}
+                          />
+                          <Text>{item.doctor_name}</Text>
+                        </TouchableOpacity>
                       </Box>
                     )
                   })}
@@ -196,7 +223,8 @@ const Home = (props) => {
                 shadow="2"
                 py={4}
                 rounded="xl"
-                size="lg">
+                size="lg"
+              >
                 Book Online
               </Button>
               <Button
@@ -205,7 +233,8 @@ const Home = (props) => {
                 colorScheme={'secondary'}
                 py={4}
                 rounded="xl"
-                size="lg">
+                size="lg"
+              >
                 Book In Place
               </Button>
             </Box>

@@ -26,6 +26,7 @@ export default Chat = (props) => {
     }
 
     getStoredUserInfo()
+    
     refOn((message) => {
       console.log('oldmessage will store in state', message)
       setState((prevState) => {

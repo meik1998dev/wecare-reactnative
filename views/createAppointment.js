@@ -79,7 +79,7 @@ const createAppointment = props => {
   }
 
   const check_timing = async () => {
-    setState({isLoding: true})
+    setState({...state,isLoding: true})
     await axios({
       method: 'post',
       url: api_url + check_available_timing,
@@ -90,17 +90,17 @@ const createAppointment = props => {
       },
     })
       .then(async response => {
-        setState({isLoding: false})
+        setState({...state,isLoding: false})
         if (response.data.status == 0) {
           alert(response.data.message)
         } else {
-          createBooking()
+          props.route.params.type===2 ? createBooking() : onPay()
         }
       })
       .catch(error => {
         console.log(error)
         alert('something went wrong')
-        setState({isLoding: false})
+        setState({...state,isLoding: false})
       })
   }
 
@@ -193,6 +193,8 @@ const createAppointment = props => {
     })
   }
 
+  console.log(props.route.params.type);
+
   return (
     <>
       {state.isLoding ? (
@@ -270,7 +272,7 @@ const createAppointment = props => {
             />
           </Box>
           <Button
-            onPress={props.route.params.type===2 ? createBooking : onPay}
+            onPress={check_timing}
             mt={7}
             rounded="xl"
             px={10}

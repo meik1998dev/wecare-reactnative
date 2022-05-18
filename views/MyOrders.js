@@ -1,19 +1,21 @@
 import axios from 'axios'
-import {Badge, Box, FlatList, Text, View, VStack} from 'native-base'
+import { Badge, Box, FlatList, Text, View, VStack } from 'native-base'
 import React from 'react'
-import {connect} from 'react-redux'
-import {api_url, img_url, my_orders} from '../config/Constants'
+import { connect } from 'react-redux'
+import { api_url, img_url, my_orders } from '../config/Constants'
 import {
   serviceActionPending,
   serviceActionError,
   serviceActionSuccess,
 } from '../actions/MyOrdersActions'
 import Moment from 'moment'
-import {Colors} from '../assets/Colors'
-import {TouchableOpacity, Image} from 'react-native'
+import { Colors } from '../assets/Colors'
+import { TouchableOpacity, Image } from 'react-native'
 import AsyncStorageLib from '@react-native-async-storage/async-storage'
+import database from '@react-native-firebase/database'
+import CountdownTimer from '../components/CountDownTime'
 
-const MyOrders = props => {
+const MyOrders = (props) => {
   const [state, setState] = React.useState({
     current_status: '',
     isLoding: false,
@@ -26,17 +28,28 @@ const MyOrders = props => {
     getMyOrders()
   }, [])
 
-  console.log(state.booking_requests)
+  React.useEffect(() => {
+    syncBooking()
+  }, [])
+
+  const syncBooking = () => {
+    database()
+      .ref('/customers/' + global.id)
+      .on('value', (snapshot) => {
+        getMyOrders()
+      })
+  }
+
   const getMyOrders = async () => {
-    setState({...state, isLoding: true})
+    setState({ ...state, isLoding: true })
     props.serviceActionPending()
     const user_id = await AsyncStorageLib.getItem('user_id')
     await axios({
       method: 'post',
       url: api_url + my_orders,
-      data: {customer_id: user_id},
+      data: { customer_id: user_id },
     })
-      .then(async response => {
+      .then(async (response) => {
         console.log(response.data)
         setState({
           ...state,
@@ -47,14 +60,14 @@ const MyOrders = props => {
         })
         await props.serviceActionSuccess(response.data)
         if (response.data.result.length == 0) {
-          setState({...state, current_status: 'No data found'})
+          setState({ ...state, current_status: 'No data found' })
         } else {
-          setState({...state, current_status: ''})
+          setState({ ...state, current_status: '' })
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
-        setState({...state, isLoding: false})
+        setState({ ...state, isLoding: false })
         props.serviceActionError(error)
       })
   }
@@ -63,7 +76,7 @@ const MyOrders = props => {
     booking_status,
     booking_request_status,
     booking_status_name,
-    booking_request_status_name,
+    booking_request_status_name
   ) => {
     if (booking_status) {
       return (
@@ -94,8 +107,8 @@ const MyOrders = props => {
     }
   }
 
-  const navigateToOrderDetails = data => {
-    props.navigation.navigate('My Booking Details', {data: data})
+  const navigateToOrderDetails = (data) => {
+    props.navigation.navigate('My Booking Details', { data: data })
   }
 
   return (
@@ -108,9 +121,9 @@ const MyOrders = props => {
         </Box>
         <FlatList
           width={'full'}
-          contentContainerStyle={{alignItems: 'center'}}
+          contentContainerStyle={{ alignItems: 'center' }}
           data={props.bookings}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <TouchableOpacity
               style={{
                 alignItems: 'center',
@@ -120,11 +133,12 @@ const MyOrders = props => {
                 marginBottom: 20,
                 borderRadius: 10,
                 shadowColor: 'rgba(0,0,0, .4)', // IOS
-                shadowOffset: {height: 1, width: 1}, // IOS
+                shadowOffset: { height: 1, width: 1 }, // IOS
                 shadowOpacity: 1, // IOS
                 shadowRadius: 1, //IOS
               }}
-              onPress={() => navigateToOrderDetails(item)}>
+              onPress={() => navigateToOrderDetails(item)}
+            >
               <Box
                 height={'100%'}
                 rounded={'lg'}
@@ -132,7 +146,8 @@ const MyOrders = props => {
                 alignItems={'center'}
                 justifyContent={'space-evenly'}
                 width={'95%'}
-                backgroundColor={Colors.white}>
+                backgroundColor={Colors.white}
+              >
                 <Image
                   alt="img"
                   style={{
@@ -151,14 +166,17 @@ const MyOrders = props => {
                     item.booking_status,
                     item.booking_request_status,
                     item.booking_status_name,
-                    item.booking_request_status_name,
+                    item.booking_request_status_name
                   )}
                 </VStack>
-                <VStack alignItems={'center'} space={4}>
+                <VStack alignItems={'center'} space={2}>
                   <Text fontWeight={'bold'} color={Colors.teal} fontSize={20}>
                     {Moment(item.start_time).format('DD MMM')}
                   </Text>
                   <Text>{Moment(item.start_time).format('hh:mm A')}</Text>
+                  {item.booking_request_status == 2 && (
+                    <CountdownTimer targetDate={Moment(item.start_time).valueOf()} />
+                  )}
                 </VStack>
               </Box>
             </TouchableOpacity>
@@ -183,10 +201,10 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   serviceActionPending: () => dispatch(serviceActionPending()),
-  serviceActionError: error => dispatch(serviceActionError(error)),
-  serviceActionSuccess: data => dispatch(serviceActionSuccess(data)),
+  serviceActionError: (error) => dispatch(serviceActionError(error)),
+  serviceActionSuccess: (data) => dispatch(serviceActionSuccess(data)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyOrders)

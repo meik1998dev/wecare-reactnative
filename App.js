@@ -1,16 +1,13 @@
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native'
-import {extendTheme, NativeBaseProvider} from 'native-base'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import { extendTheme, NativeBaseProvider } from 'native-base'
 import React from 'react'
-import {Provider} from 'react-redux'
-import {createStore} from 'redux'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import allReducers from './reducers/index.js'
-import {Colors} from './assets/Colors'
-import {createDrawerNavigator} from '@react-navigation/drawer'
-import {LogBox} from 'react-native'
-import {
-  HomeStackNavigator,
-  MainStackNavigator,
-} from './navigation/StackNavigator.js'
+import { Colors } from './assets/Colors'
+import { createDrawerNavigator } from '@react-navigation/drawer'
+import { LogBox } from 'react-native'
+import { HomeStackNavigator, MainStackNavigator } from './navigation/StackNavigator.js'
 import MyOrders from './views/MyOrders.js'
 import MyProfile from './views/MyProfile.js'
 import Home from './views/Home.js'
@@ -24,8 +21,8 @@ import MyBooking from './views/doctorViews/MyBooking.js'
 import MyBookingDetails from './views/MyBookingDetails.js'
 import MyBookingsDetails from './views/doctorViews/MyBookingsDetails.js'
 import DoctorChat from './views/doctorViews/DoctorChat.js'
-import {fb} from './config/firebaseConfig.js'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import { fb } from './config/firebaseConfig.js'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import DoctorLogin from './views/doctorViews/DoctorLogin.js'
 import DoctorRegister from './views/doctorViews/DoctorRegister.js'
 import VideoCall from './views/VideoCall.js'
@@ -34,9 +31,10 @@ import DoctorHome from './views/doctorViews/DoctorHome.js'
 import DoctorVideoCall from './views/doctorViews/DoctorVideo.js'
 import DoctorsList from './views/DoctorsList.js'
 import createAppointment from './views/createAppointment.js'
-import {PhoneVerification} from './views/PhoneVerification.js'
+import { PhoneVerification } from './views/PhoneVerification.js'
 import { DoctorPhoneVerification } from './views/doctorViews/PhoneVerification.js'
 import { Auth } from './views/Auth.js'
+import { DoctorOverview } from './views/DoctorOverview.js'
 
 const Drawer = createDrawerNavigator()
 const Stack = createNativeStackNavigator()
@@ -90,7 +88,7 @@ export default function App() {
     <Provider store={store}>
       <NativeBaseProvider theme={theme}>
         <NavigationContainer theme={MyTheme}>
-          <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Auth" component={Auth} />
             <Stack.Screen
               options={{
@@ -107,19 +105,11 @@ export default function App() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Phone Verify" component={PhoneVerification} />
+            <Stack.Screen name="DoctorOverview" component={DoctorOverview} />
             <Stack.Screen name="Doctor Phone Verify" component={DoctorPhoneVerification} />
-            <Stack.Screen
-              name="My Booking Details"
-              component={MyBookingDetails}
-            />
-            <Stack.Screen
-              name="Booking Details"
-              component={MyBookingsDetails}
-            />
-            <Stack.Screen
-              name="Create Appointment"
-              component={createAppointment}
-            />
+            <Stack.Screen name="My Booking Details" component={MyBookingDetails} />
+            <Stack.Screen name="Booking Details" component={MyBookingsDetails} />
+            <Stack.Screen name="Create Appointment" component={createAppointment} />
             <Stack.Screen name="Video" component={VideoCall} />
             <Stack.Screen name="DoctorsList" component={DoctorsList} />
             <Stack.Screen name="Chat" component={Chat} />
@@ -142,7 +132,8 @@ const CustomerNavigator = () => {
         headerStyle: {
           backgroundColor: Colors.white,
         },
-      }}>
+      }}
+    >
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Profile" component={MyProfile} />
       <Drawer.Screen name="My Appointment" component={MyOrders} />
@@ -159,7 +150,8 @@ const DoctorNavigator = () => (
       headerStyle: {
         backgroundColor: Colors.white,
       },
-    }}>
+    }}
+  >
     <Drawer.Screen name="Home" component={DoctorHome} />
     <Drawer.Screen name="My Booking" component={MyBooking} />
     <Drawer.Screen name="Logout" component={Logout} />
